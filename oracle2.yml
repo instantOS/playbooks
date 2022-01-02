@@ -1,6 +1,6 @@
 ---
-- name: oracle 1 setup
-  hosts: oracle1
+- name: oracle 2 setup
+  hosts: oracle2
   become: yes
 
   vars:
@@ -29,10 +29,10 @@
     - grog.sudo
     - geerlingguy.pip
     - geerlingguy.certbot
+    - robertdebock.cargo
     - geerlingguy.security
     - geerlingguy.nginx
     - geerlingguy.docker_arm
-    - robertdebock.cargo
 
 
   tasks:
