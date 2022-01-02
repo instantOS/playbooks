@@ -1,14 +1,14 @@
 ---
-- name: hostunlimited setup
-  hosts: hostunlimited
+- name: oracle 1 setup
+  hosts: oracle1
   become: yes
 
-  vars_files: vars/basics.yml
-
   vars:
-  certbot_certs:
-    - domains:
-      - "hostunlimited.paperbenni.xyz"
+    certbot_certs:
+      - domains:
+        - "video.paperbenni.xyz"
+
+  vars_files: vars/basics.yml
 
   pre_tasks:
     - name: ensure apt cache is updated
@@ -25,7 +25,6 @@
         state: present
         key: "{{ lookup('file', '/home/benjamin/.ssh/id_rsa.pub') }}"
 
-
   roles:
     - grog.sudo
     - geerlingguy.pip
@@ -35,17 +34,12 @@
     - geerlingguy.docker
     - robertdebock.cargo
 
+
   tasks:
     - name: Ensure docroot exists
       file:
         path: "{{ nginx_docroot }}"
         state: directory
-    - name: copy nginx server config
-      template:
-        src: templates/https-letsencrypt.conf.j2
-        dest: /etc/nginx/sites-enabled/https-letsencrypt.conf
-        mode: 0644
-      notify: restart nginx
-  
+
   handlers:
     - import_tasks: handlers/basics.yml

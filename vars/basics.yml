@@ -1,0 +1,18 @@
+---
+
+certbot_install_method: package
+certbot_create_if_missing: false
+certbot_admin_email: "paperbenni@gmail.com"
+nginx_vhosts: []
+nginx_remove_default_vhost: true
+nginx_ppa_version: stable
+nginx_docroot: /var/www/html
+sudo_list_group:
+- name: paperbenni
+  sudo:
+    hosts: ALL
+    as: ALL
+    commands: ALL
+    nopasswd: yes
+docker_users:
+  - paperbenni
