@@ -1,0 +1,22 @@
+# HTTPS server configuration
+
+# Redirect http traffic to https
+
+server {
+    listen 80 default_server;
+    server_name _;
+    index index.html;
+    return 301 https://$host$request_uri;
+}
+
+
+# Server HTTPS traffic using the letsencrypt certificate. 
+
+server {
+    listen 443 ssl default_server;
+    server_name {{ inventory_hostname }};
+    root {{ nginx_docroot }};
+
+    ssl_certificate /etc/letsencrypt/live/{{ inventory_hostname }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ inventory_hostname }}/privkey.pem;
+}

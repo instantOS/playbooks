@@ -1,0 +1,13 @@
+---
+roles:
+  - geerlingguy.docker_arm
+  - geerlingguy.docker
+  - geerlingguy.pip
+  - robertdebock.cargo
+  - geerlingguy.ntp
+  - geerlingguy.certbot
+  - geerlingguy.nginx
+  - grog.sudo
+  - geerlingguy.security
+
+

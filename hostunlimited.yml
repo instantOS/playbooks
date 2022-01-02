@@ -1,0 +1,69 @@
+---
+- name: hostunlimited setup
+  hosts: hostunlimited
+  become: yes
+
+  vars:
+    certbot_install_method: package
+    certbot_create_if_missing: false
+    certbot_certs:
+      - domains:
+        - "hostunlimited.paperbenni.xyz"
+    certbot_admin_email: "paperbenni@gmail.com"
+    nginx_vhosts: []
+    nginx_remove_default_vhost: true
+    nginx_ppa_version: stable
+    nginx_docroot: /var/www/html
+    sudo_list_group:
+    - name: paperbenni
+      sudo:
+        hosts: ALL
+        as: ALL
+        commands: ALL
+        nopasswd: yes
+    docker_users:
+      - ubuntu
+
+
+  pre_tasks:
+    - name: ensure apt cache is updated
+      apt: update_cache=true cache_valid_time=3600
+    - name: ensure paperbenni user exists
+      user:
+        name: paperbenni
+        state: present
+        groups: sudo
+        append: yes
+    - name: Ensure ssh key is authorized
+      authorized_key:
+        user: paperbenni
+        state: present
+        key: "{{ lookup('file', '/home/benjamin/.ssh/id_rsa.pub') }}"
+
+
+  roles:
+    - grog.sudo
+    - geerlingguy.pip
+    - geerlingguy.certbot
+    - geerlingguy.security
+    - geerlingguy.nginx
+    - geerlingguy.docker
+    - robertdebock.cargo
+
+  tasks:
+    - name: Ensure docroot exists
+      file:
+        path: "{{ nginx_docroot }}"
+        state: directory
+    - name: copy nginx server config
+      template:
+        src: templates/https-letsencrypt.conf.j2
+        dest: /etc/nginx/sites-enabled/https-letsencrypt.conf
+        mode: 0644
+      notify: restart nginx
+  
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
