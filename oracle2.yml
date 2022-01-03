@@ -6,7 +6,9 @@
   vars:
     certbot_certs:
       - domains:
-        - "minecraft.paperbenni.xyz"
+          - "minecraft.paperbenni.xyz"
+    mpm_dir: ~/workspace/mpm-repo
+    minecraft_version: "1.18"
 
   vars_files: vars/basics.yml
 
@@ -34,12 +36,40 @@
     - geerlingguy.nginx
     - geerlingguy.docker_arm
 
-
   tasks:
     - name: Ensure docroot exists
       file:
         path: "{{ nginx_docroot }}"
         state: directory
+    - name: ensure mpm is installed
+      shell:
+        cmd: "curl -Ls https://raw.githubusercontent.com/paperbenni/mpm/master/install.sh | bash"
+        creates: /usr/local/bin/mpm
+    - name: ensure java is installed
+      apt: name=openjdk-17-jre
+    - name: update spigot
+      copy:
+        src: "~/workspace/mpm-repo/spigot/{{ minecraft_version }}/spigot.jar"
+        dest: /home/ubuntu/spigot/spigot.jar
+        owner: ubuntu
+        mode: 0755
+    - name: update spigot plugins
+      copy:
+        src: "{{ mpm_dir }}/plugins/{{ item }}/{{ minecraft_version }}/{{ item }}.jar"
+        dest: "/home/ubuntu/spigot/plugins/{{ item }}.jar"
+        owner: ubuntu
+      with_items:
+        - chat
+        - essentials
+        - floodgate
+        - geyser
+        - griefprevention
+        - luckperms
+        - slimefun
+        - vault
+        - viabackwards
+        - viarewind
+        - viaversion
 
   handlers:
     - import_tasks: handlers/basics.yml
