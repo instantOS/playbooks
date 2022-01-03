@@ -9,5 +9,6 @@ roles:
   - geerlingguy.nginx
   - grog.sudo
   - geerlingguy.security
+  - geerlingguy.firewall
 
 

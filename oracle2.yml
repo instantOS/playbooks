@@ -9,6 +9,13 @@
           - "minecraft.paperbenni.xyz"
     mpm_dir: ~/workspace/mpm-repo
     minecraft_version: "1.18"
+    firewall_allowed_tcp_ports:
+    - "22"
+    - "25"
+    - "80"
+    - "443"
+    - "25565"
+    - "3000"
 
   vars_files: vars/basics.yml
 
@@ -30,6 +37,7 @@
   roles:
     - grog.sudo
     - geerlingguy.pip
+    - geerlingguy.firewall
     - geerlingguy.certbot
     - robertdebock.cargo
     - geerlingguy.security
