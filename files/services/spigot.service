@@ -1,0 +1,9 @@
+[Unit]
+Description=paperspigot in a tmux session
+
+[Service]
+ExecStart=screen -Dm -s /bin/bash -S spigot bash -c 'cd /home/ubuntu/spigot; mpm start 15000m'
+
+[Install]
+WantedBy=default.target
+

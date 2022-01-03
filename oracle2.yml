@@ -47,6 +47,15 @@
         creates: /usr/local/bin/mpm
     - name: ensure java is installed
       apt: name=openjdk-17-jre
+    - name: ensure extra needed packages are installed
+      apt:
+        name:
+          - neovim
+          - tmux
+          - wget
+          - curl
+          - jq
+          - zsh
     - name: update spigot
       copy:
         src: "~/workspace/mpm-repo/spigot/{{ minecraft_version }}/spigot.jar"
@@ -70,6 +79,26 @@
         - viabackwards
         - viarewind
         - viaversion
+    - name: ensure systemd user services directory exists
+      file:
+        name: ~/.config/systemd/user
+        state: directory
+      become_user: ubuntu
+      tags: [spigot]
+    - name: install spigot service
+      copy:
+        src: files/services/spigot.service
+        dest: ~/.config/systemd/user/spigot.service
+      become_user: ubuntu
+      tags: [spigot]
+    - name: enable spigot
+      systemd:
+        scope: user
+        state: started
+        enabled: yes
+        name: spigot.service
+      become_user: ubuntu
+      tags: [spigot]
 
   handlers:
     - import_tasks: handlers/basics.yml
