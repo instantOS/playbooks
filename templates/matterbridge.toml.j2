@@ -1,0 +1,97 @@
+[matrix]
+[matrix.mymatrix]
+#Server is your homeserver (eg https://matrix.org)
+Server="https://matrix.org"
+
+#login/pass of your bot.
+#Use a dedicated user for this and not your own!
+#Messages sent from this user will not be relayed to avoid loops.
+Login="instantos"
+Password="{{ matrix_password }}"
+
+RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
+
+#Whether to send the homeserver suffix. eg ":matrix.org" in @username:matrix.org
+#to other bridges, or only send "username".(true only sends username)
+#OPTIONAL (default false)
+NoHomeServerSuffix=false
+
+[discord]
+[discord.mydiscord]
+
+# You can get your token by following the instructions on
+# https://github.com/42wim/matterbridge/wiki/Discord-bot-setup
+# If you want roles/groups mentions to be shown with names instead of ID, 
+# you'll need to give your bot the "Manage Roles" permission.
+Token="{{ discord_token }}"
+
+Server="683782260071071764" # picked from guilds the bot is connected to
+RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
+
+[telegram]
+[telegram.mytelegram]
+#See https://core.telegram.org/bots#6-botfather 
+#and https://www.linkedin.com/pulse/telegram-bots-beginners-marco-frau
+Token="{{ gitter_token }}"
+RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
+
+[gitter]
+[gitter.mygitter]
+#You can get your token by going to https://developer.gitter.im/docs/welcome and SIGN IN
+Token="{{ telegram_token }}"
+RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
+#This improves the situation where a gitter user uploads a picture/file, just relay the link instead of the Markdown
+ReplaceMessages=[["^\\[!\\[[^\\]]+\\]\\(https?:\\/\\/files\\.gitter\\.im\\/[^\\/]+\\/[^\\/]+\\/[^\\/]+\\/thumb\\/[^\\)]+\\)\\]\\(([^\\)]+)\\)$", "$1"], ["\\[[^\\]]+\\]\\((https:\\/\\/files\\.gitter\\.im\\/[^\\/]+\\/[^\\/]+\\/[^\\/]+\\/[^\\)]+)\\)$", "$1"]]
+
+[irc]
+[irc.myirc]
+Nick="instantos_bot" # <== change this
+NickServNick="instantos_bot" # <== change this if necessary (your nick registered with nickserv)
+NickServPassword="{{ irc_password }}" # <== change this (your pass with nickserv)
+
+Server="irc.libera.chat:6697"
+
+UseTLS=true
+UseSASL=true
+SkipTLSVerify=false
+
+RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
+
+RejoinDelay=10000
+JoinDelay=10000
+
+[[gateway]]
+    name = "instantOS"
+    enable=true
+
+    [[gateway.inout]]
+    account="gitter.mygitter"
+    channel="instantOS/community"
+
+    [[gateway.inout]]
+    account = "telegram.mytelegram"
+    channel="-1001310141699"
+
+    [[gateway.inout]]
+    account = "discord.mydiscord"
+    channel="general"
+
+    [[gateway.inout]]
+    account ="matrix.mymatrix"
+    channel = "#instantos:matrix.org"
+
+    [[gateway.inout]]
+    account="irc.myirc"
+    channel="#instantos"
+
+[[gateway]]
+    name = "help"
+    enable=true
+
+#    [[gateway.inout]]
+#    account ="matrix.mymatrix"
+#    channel = "#instantos-help:matrix.org"
+
+    [[gateway.inout]]
+    account = "discord.mydiscord"
+    channel="help"

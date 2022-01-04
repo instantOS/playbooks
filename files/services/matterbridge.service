@@ -1,0 +1,8 @@
+[Unit]
+Description=matterbridge chat bridge
+
+[Service]
+ExecStart=/usr/local/bin/matterbridge -conf /etc/matterbridge/matterbridge.toml
+
+[Install]
+WantedBy=default.target

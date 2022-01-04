@@ -16,3 +16,5 @@ sudo_list_group:
     nopasswd: yes
 docker_users:
   - paperbenni
+  - benjamin
+  - ubuntu
