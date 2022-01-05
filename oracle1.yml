@@ -6,7 +6,7 @@
   vars:
     certbot_certs:
       - domains:
-        - "video.paperbenni.xyz"
+          - "video.paperbenni.xyz"
 
   vars_files: vars/basics.yml
 
@@ -34,12 +34,22 @@
     - geerlingguy.docker
     - robertdebock.cargo
 
-
   tasks:
     - name: Ensure docroot exists
       file:
         path: "{{ nginx_docroot }}"
         state: directory
-
+    - name: copy nginx server config
+      template:
+        src: templates/https-letsencrypt.conf.j2
+        dest: /etc/nginx/sites-enabled/https-letsencrypt.conf
+        mode: 0644
+      notify: restart nginx
+    - name: ensure all instantOS packages are in nginx
+      copy:
+        src: ~/instantbuild/
+        dest: /var/www/html/
+      tags:
+        - html
   handlers:
     - import_tasks: handlers/basics.yml
