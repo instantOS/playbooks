@@ -20,6 +20,7 @@
     - "64738"
     firewall_allowed_udp_ports:
     - "64738"
+    - "25565"
 
 
   vars_files: 
@@ -74,6 +75,7 @@
           - nload
           - htop
           - jq
+          - ffmpeg
           - python3-virtualenv
           - zsh
           - mumble-server
