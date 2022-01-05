@@ -1,9 +1,9 @@
 [Unit]
-Description=matterbridge chat bridge
+Description=mumble music bot
 
 [Service]
 WorkingDirectory=/opt/programs/botamusique
-ExecStart=./venv/bin/python mumbleBot.py --config configuration.ini
+ExecStart=/opt/programs/botamusique/venv/bin/python mumbleBot.py --config configuration.ini
 
 [Install]
 WantedBy=default.target

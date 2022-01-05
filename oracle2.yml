@@ -177,15 +177,16 @@
       git:
         repo: 'https://github.com/azlux/botamusique.git'
         dest: /opt/programs/botamusique
+        force: yes
         version: 7.2.2
     - name: ensure wheel is installed for botamusique
       pip:
         name: wheel
-        virtualenv: /opt/programs/botamusique
+        virtualenv: /opt/programs/botamusique/venv
     - name: ensure botamusique dependencies are installed
       pip:
         requirements: /opt/programs/botamusique/requirements.txt
-        virtualenv: /opt/programs/botamusique
+        virtualenv: /opt/programs/botamusique/venv
     - name: ensure botamusique config is installed
       copy:
         src: files/config/botamusique_config.ini
