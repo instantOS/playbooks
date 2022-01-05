@@ -1,8 +1,8 @@
 [Unit]
-Description=matterbridge chat bridge
+Description=music bot for mumble
 
 [Service]
-ExecStart=/usr/local/bin/matterbridge -conf /etc/matterbridge/matterbridge.toml
+ExecStart=bash -c 'cd /opt/programs/botamusique'
 
 [Install]
 WantedBy=default.target
