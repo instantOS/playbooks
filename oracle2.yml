@@ -69,9 +69,12 @@
           - tmux
           - wget
           - curl
+          - python3.8-venv
+          - opus-tools
           - nload
           - htop
           - jq
+          - python3-virtualenv
           - zsh
           - mumble-server
     - name: update spigot
@@ -91,8 +94,6 @@
         - floodgate
         - geyser
         - griefprevention
-        - opus-tools
-        - python3.8-venv
         - luckperms
         - slimefun
         - vault
@@ -170,12 +171,13 @@
       notify: restart mumble
     - name: ensure opt programs directory exists
       file:
-        name: /opt/programs/
+        name: /opt/programs
         state: directory
-    - name: ensure botamusique is downloaded
-      unarchive:
-        src: http://packages.azlux.fr/botamusique/sources-stable.tar.gz
-        dest: /opt/programs/
+    - name: Git checkout
+      git:
+        repo: 'https://github.com/azlux/botamusique.git'
+        dest: /opt/programs/botamusique
+        version: 7.2.2
     - name: ensure wheel is installed for botamusique
       pip:
         name: wheel
@@ -185,8 +187,9 @@
         requirements: /opt/programs/botamusique/requirements.txt
         virtualenv: /opt/programs/botamusique
     - name: ensure botamusique config is installed
-      copy: files/config/botamusique_config.ini
-      dest: /opt/programs/botamusique/configuration.ini
+      copy:
+        src: files/config/botamusique_config.ini
+        dest: /opt/programs/botamusique/configuration.ini
     - name: install botamusique systemd service
       copy:
         src: files/services/botamusique.service

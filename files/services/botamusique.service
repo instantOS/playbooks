@@ -2,7 +2,8 @@
 Description=matterbridge chat bridge
 
 [Service]
-ExecStart=/usr/local/bin/matterbridge -conf /etc/matterbridge/matterbridge.toml
+WorkingDirectory=/opt/programs/botamusique
+ExecStart=./venv/bin/python mumbleBot.py --config configuration.ini
 
 [Install]
 WantedBy=default.target
