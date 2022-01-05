@@ -170,6 +170,7 @@
         src: templates/mumble-server.ini.j2
         dest: /etc/mumble-server.ini
         mode: 0644
+      notify: restart mumble
     - name: enable mumble-server
       systemd:
         state: started
