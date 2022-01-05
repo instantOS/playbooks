@@ -17,6 +17,9 @@
     - "25565"
     - "42695"
     - "3000"
+    - "64738"
+    firewall_allowed_udp_ports:
+    - "64738"
 
 
   vars_files: 
@@ -70,6 +73,7 @@
           - htop
           - jq
           - zsh
+          - mumble-server
     - name: update spigot
       copy:
         src: "~/workspace/mpm-repo/spigot/{{ minecraft_version }}/spigot.jar"
@@ -142,5 +146,39 @@
         enabled: yes
         name: matterbridge.service
 
+    - name: ensure mumble-server has required permissions
+      debconf:
+        name: mumble-server/use_capabilities
+        question: mumble-server/use_capabilities
+        value: 'true'
+        vtype: select
+    - name: ensure mumble-server autostarts daemon
+      debconf:
+        name: mumble-server/start_daemon
+        question: mumble-server/start_daemon
+        value: 'true'
+        vtype: select
+    - name: ensure mumble server superuser password is set
+      debconf:
+        name: mumble-server/password
+        question: mumble-server/password
+        value: "{{ mumble_password }}"
+        vtype: password
+      no_log: True
+    - name: install mumble-server config
+      template:
+        src: templates/mumble-server.ini.j2
+        dest: /etc/mumble-server.ini
+        mode: 0644
+    - name: enable mumble-server
+      systemd:
+        state: started
+        enabled: yes
+        name: mumble-server.service
+      
   handlers:
     - import_tasks: handlers/basics.yml
+    - name: restart mumble
+      service:
+        name: mumble-server
+        state: restarted
