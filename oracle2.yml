@@ -21,6 +21,7 @@
     firewall_allowed_udp_ports:
       - "64738"
       - "25565"
+    firewall_flush_rules_and_chains: true
 
   vars_files:
     - vars/basics.yml
@@ -58,7 +59,7 @@
         state: directory
     - name: copy nginx server config
       template:
-        src: templates/https-letsencrypt.conf.j2
+        src: templates/https-files-snapdrop.conf.j2
         dest: /etc/nginx/sites-enabled/https-letsencrypt.conf
         mode: 0644
       notify: restart nginx
@@ -222,6 +223,27 @@
         - botamusique
         - matterbridge
         - mumble-server
+    - name: ensure snapdrop is running
+      docker_compose:
+        project_name: snapdrop
+        definition:
+          version: "2.1"
+          services:
+            snapdrop:
+              image: paperbenni/snapdrop
+              container_name: snapdrop
+              environment:
+                - PUID=1000
+                - PGID=1000
+                - TZ=Europe/Berlin
+              volumes:
+                - /data/snapdrop/config:/config
+              ports:
+                - 8084:80
+                - 8085:443
+              restart: unless-stopped
+      tags:
+        - docker
 
   handlers:
     - import_tasks: handlers/basics.yml
