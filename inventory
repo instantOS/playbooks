@@ -5,4 +5,4 @@ hostunlimited.paperbenni.xyz ansible_user=paperbenni
 video.paperbenni.xyz ansible_user=paperbenni
 
 [oracle2]
-minecraft.paperbenni.xyz ansible_user=ubuntu
+packages.instantos.io ansible_user=ubuntu

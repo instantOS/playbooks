@@ -6,6 +6,7 @@
   vars:
     certbot_certs:
       - domains:
+          - "packages.instantos.io"
           - "minecraft.paperbenni.xyz"
     mpm_dir: ~/workspace/mpm-repo
     minecraft_version: "1.18"
@@ -66,7 +67,7 @@
       tags:
         - nginx
     - name: ensure all instantOS packages are in nginx
-      copy:
+      synchronize:
         src: ~/instantbuild/
         dest: /var/www/html/
       tags:
