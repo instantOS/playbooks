@@ -19,9 +19,13 @@
       - "42695"
       - "3000"
       - "64738"
+      - "8008"
+      - "9005"
+      - "19132"
     firewall_allowed_udp_ports:
       - "64738"
       - "25565"
+      - "19132"
     firewall_flush_rules_and_chains: true
 
   vars_files:
