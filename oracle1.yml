@@ -1,14 +1,38 @@
 ---
 - name: oracle 1 setup
   hosts: oracle1
-  become: yes
+  become: true
 
   vars:
     certbot_certs:
       - domains:
           - "video.paperbenni.xyz"
+    firewall_allowed_tcp_ports:
+      - "22"
+      - "25"
+      - "80"
+      - "443"
+      - "25565"
+      - "42695"
+      - "3000"
+      - "64738"
+      - "8008"
+      - "8085"
+      - "8080"
+      - "8096"
+      - "9005"
+      - "1935"
+      - "19132"
+    firewall_allowed_udp_ports:
+      - "64738"
+      - "1935"
+      - "25565"
+      - "19132"
+    firewall_flush_rules_and_chains: true
 
-  vars_files: vars/basics.yml
+  vars_files:
+    - vars/basics.yml
+    - secrets.yml
 
   pre_tasks:
     - name: ensure apt cache is updated
@@ -28,6 +52,7 @@
   roles:
     - grog.sudo
     - geerlingguy.pip
+    - geerlingguy.firewall
     - geerlingguy.certbot
     - geerlingguy.security
     - geerlingguy.nginx
@@ -41,14 +66,37 @@
         state: directory
     - name: copy nginx server config
       template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+      notify: restart nginx
+    - name: copy nginx site
+      template:
         src: templates/https-letsencrypt.conf.j2
         dest: /etc/nginx/sites-enabled/https-letsencrypt.conf
         mode: 0644
       notify: restart nginx
-    - name: ensure all instantOS packages are in nginx
+    - name: set up caddy
+      docker_compose:
+        project_name: caddy
+        definition:
+          version: "3.7"
+          services:
+            caddy:
+              image: caddy:latest
+              restart: unless-stopped
+              ports:
+                - "80:80"
+                - "443:443"
+              volumes:
+                - /data/caddy/file/Caddyfile:/etc/caddy/Caddyfile
+                - /data/caddy/site:/srv
+                - /data/caddy/data:/data
+                - /data/caddy/config:/config
+    - name: ensure all instantOS packages are in caddy
       copy:
         src: ~/instantbuild/
-        dest: /var/www/html/
+        dest: /data/caddy/site/
       tags:
         - html
   handlers:
