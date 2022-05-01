@@ -22,6 +22,8 @@
       - "8008"
       - "9005"
       - "19132"
+      - "8000"
+      - "8443"
     firewall_allowed_udp_ports:
       - "64738"
       - "25565"
@@ -58,6 +60,7 @@
     - geerlingguy.docker_arm
 
   tasks:
+
     - name: Ensure docroot exists
       file:
         path: "{{ nginx_docroot }}"

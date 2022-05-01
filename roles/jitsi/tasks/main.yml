@@ -1,0 +1,37 @@
+---
+- name: create env file with secrets
+  template:
+    src: templates/jitsi.env.j2
+    dest: files/docker_compose/jitsi/.env
+  delegate_to: localhost
+  become: no
+  tags:
+    - jitsi
+- name: ensure jitsi directories exist
+  file:
+    path: /data/jitsi/{{ item.name }}
+    state: directory
+    mode: '0755'
+  with_items:
+   - name: "web/crontabs"
+   - name: "web/letsencrypt"
+   - name: "transcripts"
+   - name: "prosody/config"
+   - name: "prosody/prosody-plugins-custom"
+   - name: "jicofo"
+   - name: "jvb"
+   - name: "jigasi"
+   - name: "jibri"
+  tags:
+    - jitsi
+- name: copy docker compose project
+  copy:
+    src: files/docker_compose/jitsi/
+    dest: /opt/jitsidocker/
+  tags:
+    - jitsi
+- name: ensure jitsi docker is running
+  docker_compose:
+    project_src: /opt/jitsidocker
+  tags:
+    - jitsi
