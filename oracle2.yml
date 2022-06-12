@@ -94,6 +94,7 @@
           - opus-tools
           - nload
           - npm
+          - nginx-extras
           - htop
           - jq
           - ffmpeg
