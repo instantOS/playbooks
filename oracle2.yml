@@ -79,6 +79,7 @@
         dest: /var/www/html/
       tags:
         - html
+        - instantos
     - name: ensure mpm is installed
       shell:
         cmd: "curl -Ls https://raw.githubusercontent.com/paperbenni/mpm/master/install.sh | bash"
