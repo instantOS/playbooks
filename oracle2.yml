@@ -9,7 +9,7 @@
           - "packages.instantos.io"
           - "minecraft.paperbenni.xyz"
     mpm_dir: ~/workspace/mpm-repo
-    minecraft_version: "1.18"
+    minecraft_version: "1.19"
     firewall_allowed_tcp_ports:
       - "22"
       - "25"
@@ -111,6 +111,8 @@
         dest: /home/ubuntu/spigot/spigot.jar
         owner: ubuntu
         mode: 0755
+      tags:
+        - minecraft
     - name: update spigot plugins
       copy:
         src: "{{ mpm_dir }}/plugins/{{ item }}/{{ minecraft_version }}/{{ item }}.jar"
@@ -128,16 +130,23 @@
         - viabackwards
         - viarewind
         - viaversion
+      tags:
+        - minecraft
     - name: ensure systemd user services directory exists
       file:
         name: ~/.config/systemd/user
         state: directory
       become_user: ubuntu
+      tags:
+        - minecraft
     - name: install spigot service
       copy:
         src: files/services/spigot.service
         dest: ~/.config/systemd/user/spigot.service
       become_user: ubuntu
+      tags:
+        - minecraft
+
     - name: enable spigot
       systemd:
         scope: user
@@ -145,6 +154,8 @@
         enabled: yes
         name: spigot.service
       become_user: ubuntu
+      tags:
+        - minecraft
     - name: ensure matterbridge directory exists
       file:
         name: "/etc/matterbridge"
