@@ -93,8 +93,8 @@
           - tmux
           - wget
           - curl
-          - python3.8-venv
           - cockpit
+          - python3-venv
           - opus-tools
           - nload
           - npm
@@ -212,36 +212,12 @@
       file:
         name: /opt/programs
         state: directory
-    - name: Git checkout
-      git:
-        repo: "https://github.com/azlux/botamusique.git"
-        dest: /opt/programs/botamusique
-        force: yes
-        version: 7.2.2
-    - name: ensure wheel is installed for botamusique
-      pip:
-        name: wheel
-        virtualenv: /opt/programs/botamusique/venv
-    - name: ensure botamusique dependencies are installed
-      pip:
-        requirements: /opt/programs/botamusique/requirements.txt
-        virtualenv: /opt/programs/botamusique/venv
-    - name: ensure botamusique config is installed
-      copy:
-        src: files/config/botamusique_config.ini
-        dest: /opt/programs/botamusique/configuration.ini
-    - name: install botamusique systemd service
-      copy:
-        src: files/services/botamusique.service
-        dest: /etc/systemd/system/botamusique.service
-        mode: 0644
     - name: ensure systemd services are enabled
       systemd:
         state: started
         enabled: yes
         name: "{{ item }}.service"
       with_items:
-        - botamusique
         - matterbridge
         - mumble-server
     - name: ensure snapdrop is running
