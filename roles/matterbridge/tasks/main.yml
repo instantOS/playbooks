@@ -1,0 +1,32 @@
+---
+- name: ensure matterbridge directory exists
+  file:
+    name: "/etc/matterbridge"
+    state: directory
+- name: install matterbridge config
+  template:
+    src: templates/matterbridge.toml.j2
+    dest: "/etc/matterbridge/matterbridge.toml"
+    mode: 0644
+- name: install matterbridge service
+  copy:
+    src: files/services/matterbridge.service
+    dest: /etc/systemd/system/matterbridge.service
+    mode: 0644
+- name: check latest matterbridge
+  uri:
+    url: https://api.github.com/repos/42wim/matterbridge/releases/latest
+    return_content: true
+  register: matterbridge_latest
+- name: "installing matterbridge {{ matterbridge_latest.json.tag_name }}"
+  loop: "{{ matterbridge_latest.json.assets }}"
+  when: "'linux-arm64' in item.name"
+  get_url:
+    url: "{{ item.browser_download_url }}"
+    dest: /usr/local/bin/matterbridge
+    mode: 0755
+- name: ensure matterbridge is enabled
+  systemd:
+    state: started
+    enabled: yes
+    name: matterbridge

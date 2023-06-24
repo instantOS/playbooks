@@ -1,0 +1,77 @@
+---
+- name: ensure mpm is installed
+  shell:
+    cmd: "curl -Ls https://raw.githubusercontent.com/paperbenni/mpm/master/install.sh | bash"
+    creates: /usr/local/bin/mpm
+- name: ensure java is installed
+  apt: name=openjdk-17-jre
+- name: ensure extra needed packages are installed
+  apt:
+    name:
+      - neovim
+      - tmux
+      - wget
+      - curl
+      - cockpit
+      - python3-venv
+      - opus-tools
+      - nload
+      - npm
+      - nginx-extras
+      - htop
+      - jq
+      - ffmpeg
+      - python3-virtualenv
+      - zsh
+      - mumble-server
+- name: update spigot
+  copy:
+    src: "~/workspace/mpm-repo/spigot/{{ minecraft_version }}/spigot.jar"
+    dest: /home/ubuntu/spigot/spigot.jar
+    owner: ubuntu
+    mode: 0755
+  tags:
+    - minecraft
+- name: update spigot plugins
+  copy:
+    src: "{{ mpm_dir }}/plugins/{{ item }}/{{ minecraft_version }}/{{ item }}.jar"
+    dest: "/home/ubuntu/spigot/plugins/{{ item }}.jar"
+    owner: ubuntu
+  with_items:
+    - chat
+    - essentials
+    - floodgate
+    - geyser
+    - griefprevention
+    - luckperms
+    - slimefun
+    - vault
+    - viabackwards
+    - viarewind
+    - viaversion
+  tags:
+    - minecraft
+- name: ensure systemd user services directory exists
+  file:
+    name: ~/.config/systemd/user
+    state: directory
+  become_user: ubuntu
+  tags:
+    - minecraft
+- name: install spigot service
+  copy:
+    src: files/services/spigot.service
+    dest: ~/.config/systemd/user/spigot.service
+  become_user: ubuntu
+  tags:
+    - minecraft
+
+- name: enable spigot
+  systemd:
+    scope: user
+    state: started
+    enabled: yes
+    name: spigot.service
+  become_user: ubuntu
+  tags:
+    - minecraft

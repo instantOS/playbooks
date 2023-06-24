@@ -1,0 +1,22 @@
+---
+- name: ensure snapdrop is running
+  docker_compose:
+    project_name: snapdrop
+    definition:
+      version: "2.1"
+      services:
+        snapdrop:
+          image: paperbenni/snapdrop
+          container_name: snapdrop
+          environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Europe/Berlin
+          volumes:
+            - /data/snapdrop/config:/config
+          ports:
+            - 8084:80
+            - 8085:443
+          restart: unless-stopped
+  tags:
+    - docker
