@@ -1,0 +1,20 @@
+---
+- name: Ensure docroot exists
+  file:
+    path: "{{ nginx_docroot }}"
+    state: directory
+- name: copy nginx server config
+  template:
+    src: templates/https-files-snapdrop.conf.j2
+    dest: /etc/nginx/sites-enabled/https-letsencrypt.conf
+    mode: 0644
+  notify: restart nginx
+  tags:
+    - nginx
+- name: ensure all instantOS packages are in nginx
+  synchronize:
+    src: ~/instantbuild/
+    dest: /var/www/html/
+  tags:
+    - html
+    - instantos
