@@ -4,6 +4,7 @@
   become: true
 
   vars:
+    swap_file_size_mb: '1024'
     certbot_certs:
       - domains:
           - "video.paperbenni.xyz"
@@ -59,6 +60,7 @@
     - geerlingguy.certbot
     - geerlingguy.security
     - geerlingguy.nginx
+    - geerlingguy.swap
     - geerlingguy.docker
     - robertdebock.cargo
 
