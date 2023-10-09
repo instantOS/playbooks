@@ -35,14 +35,6 @@ RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
 Token="{{ gitter_token }}"
 RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
 
-[gitter]
-[gitter.mygitter]
-#You can get your token by going to https://developer.gitter.im/docs/welcome and SIGN IN
-Token="{{ telegram_token }}"
-RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
-#This improves the situation where a gitter user uploads a picture/file, just relay the link instead of the Markdown
-ReplaceMessages=[["^\\[!\\[[^\\]]+\\]\\(https?:\\/\\/files\\.gitter\\.im\\/[^\\/]+\\/[^\\/]+\\/[^\\/]+\\/thumb\\/[^\\)]+\\)\\]\\(([^\\)]+)\\)$", "$1"], ["\\[[^\\]]+\\]\\((https:\\/\\/files\\.gitter\\.im\\/[^\\/]+\\/[^\\/]+\\/[^\\/]+\\/[^\\)]+)\\)$", "$1"]]
-
 [irc]
 [irc.myirc]
 Nick="instantos_bot" # <== change this
@@ -63,10 +55,6 @@ JoinDelay=10000
 [[gateway]]
     name = "instantOS"
     enable=true
-
-    [[gateway.inout]]
-    account="gitter.mygitter"
-    channel="instantOS/community"
 
     [[gateway.inout]]
     account = "telegram.mytelegram"
