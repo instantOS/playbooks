@@ -3,8 +3,12 @@
   shell:
     cmd: "curl -Ls https://raw.githubusercontent.com/paperbenni/mpm/master/install.sh | bash"
     creates: /usr/local/bin/mpm
+  tags:
+    - minecraft
 - name: ensure java is installed
   apt: name=openjdk-17-jre
+  tags:
+    - minecraft
 - name: ensure extra needed packages are installed
   apt:
     name:
@@ -12,18 +16,11 @@
       - tmux
       - wget
       - curl
-      - cockpit
-      - python3-venv
-      - opus-tools
-      - nload
-      - npm
-      - nginx-extras
       - htop
       - jq
-      - ffmpeg
-      - python3-virtualenv
       - zsh
-      - mumble-server
+  tags:
+    - minecraft
 - name: update spigot
   copy:
     src: "~/workspace/mpm-repo/spigot/{{ minecraft_version }}/spigot.jar"

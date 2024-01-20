@@ -1,4 +1,20 @@
 ---
+- name: Ensure needed packages are installed
+  apt:
+    name:
+      - curl
+      - cockpit
+      - python3-venv
+      - opus-tools
+      - nload
+      - npm
+      - nginx-extras
+      - htop
+      - jq
+      - ffmpeg
+      - python3-virtualenv
+      - zsh
+      - mumble-server
 - name: ensure mumble-server has required permissions
   debconf:
     name: mumble-server/use_capabilities
