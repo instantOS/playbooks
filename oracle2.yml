@@ -61,6 +61,7 @@
     - matterbridge
     - mumble
     - spigot
+    - instantosmirror
 
   tasks:
 
