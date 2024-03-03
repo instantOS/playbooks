@@ -16,6 +16,7 @@
       - "80"
       - "443"
       - "25565"
+      - "7777"
       - "42695"
       - "3000"
       - "64738"
@@ -54,14 +55,14 @@
     - geerlingguy.pip
     - geerlingguy.firewall
     - geerlingguy.certbot
-    - robertdebock.cargo
+    # - robertdebock.cargo
     - geerlingguy.security
     - geerlingguy.nginx
-    - geerlingguy.docker_arm
+    - geerlingguy.docker
     - matterbridge
     - mumble
-    - spigot
-    - instantosmirror
+    # - spigot
+    # - instantosmirror
 
   tasks:
 
