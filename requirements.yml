@@ -3,15 +3,15 @@ roles:
   - name: geerlingguy.docker
     version: 7.1.0
   - name: geerlingguy.pip
-    version: 3.2.0
+    version: 3.0.3
   - name: geerlingguy.ntp
     version: 2.3.3
   - name: geerlingguy.certbot
-    version: 5.8.2
+    version: 5.1.0
   - name: geerlingguy.nginx
-    version: 3.1.4
+    version: 3.2.0
   - name: geerlingguy.security
-    version: 2.2.2
+    version: 2.3.0
   - name: geerlingguy.firewall
     version: 2.5.1
   - name: geerlingguy.swap
