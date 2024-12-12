@@ -9,7 +9,7 @@
           - "packages.instantos.io"
           - "minecraft.paperbenni.xyz"
     mpm_dir: ~/workspace/mpm-repo
-    minecraft_version: "1.20"
+    minecraft_version: "1.21"
     firewall_allowed_tcp_ports:
       - "22"
       - "25"
@@ -61,7 +61,7 @@
     - geerlingguy.docker
     - matterbridge
     - mumble
-    # - spigot
+    - spigot
     - instantosmirror
 
   tasks:
