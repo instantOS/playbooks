@@ -1,7 +1,7 @@
 ---
 - name: oracle 2 setup
   hosts: oracle2
-  become: yes
+  become: true
 
   vars:
     certbot_certs:
