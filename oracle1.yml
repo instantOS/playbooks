@@ -62,14 +62,13 @@
     - geerlingguy.nginx
     - geerlingguy.swap
     - geerlingguy.docker
-    - robertdebock.cargo
 
   tasks:
     - name: Ensure docroot exists
       file:
         path: "{{ nginx_docroot }}"
         state: directory
-    - name: Install apache httpd  (state=present is optional)
+    - name: Install earlyoom
       ansible.builtin.apt:
         name: earlyoom
         state: present

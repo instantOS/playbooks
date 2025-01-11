@@ -1,14 +1,14 @@
 ---
 - name: hostunlimited setup
   hosts: hostunlimited
-  become: yes
+  become: true
 
   vars_files: vars/basics.yml
 
   vars:
-  certbot_certs:
-    - domains:
-      - "hostunlimited.paperbenni.xyz"
+    certbot_certs:
+      - domains:
+        - "hostunlimited.paperbenni.xyz"
 
   pre_tasks:
     - name: ensure apt cache is updated
