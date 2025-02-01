@@ -60,6 +60,7 @@
     - geerlingguy.nginx
     - geerlingguy.docker
     - matterbridge
+    - { role: storagebox, tags: storagebox }
     - mumble
     - spigot
     - instantosmirror
