@@ -55,14 +55,14 @@
     - geerlingguy.pip
     - geerlingguy.firewall
     - geerlingguy.certbot
-    # - robertdebock.cargo
     - geerlingguy.security
     - geerlingguy.nginx
     - geerlingguy.docker
     - matterbridge
     - { role: storagebox, tags: storagebox }
     - mumble
-    - spigot
+    - { role: minecraft, tags: minecraft }
+    # - spigot
     - instantosmirror
 
   tasks:
