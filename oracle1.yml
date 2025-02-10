@@ -62,21 +62,14 @@
     - geerlingguy.nginx
     - geerlingguy.swap
     - geerlingguy.docker
+    - earlyoom
 
   tasks:
+    # TODO: replace with caddy
     - name: Ensure docroot exists
       file:
         path: "{{ nginx_docroot }}"
         state: directory
-    - name: Install earlyoom
-      ansible.builtin.apt:
-        name: earlyoom
-        state: present
-    - name: Make sure earlyoom is running
-      ansible.builtin.systemd:
-        state: started
-        enabled: true
-        name: earlyoom
     - name: copy nginx server config
       template:
         src: templates/nginx.conf.j2

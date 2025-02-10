@@ -36,8 +36,6 @@
     - secrets.yml
 
   pre_tasks:
-    - name: ensure apt cache is updated
-      apt: update_cache=true cache_valid_time=3600
     - name: ensure paperbenni user exists
       user:
         name: paperbenni
@@ -59,6 +57,7 @@
     - geerlingguy.nginx
     - geerlingguy.docker
     - matterbridge
+    - ubuntu
     - { role: storagebox, tags: storagebox }
     - mumble
     - { role: minecraft, tags: minecraft }

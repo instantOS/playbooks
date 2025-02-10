@@ -1,0 +1,27 @@
+---
+- name: Update apt cache
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Upgrade packages
+  become: true
+  apt:
+    upgrade: "dist"
+    autoremove: yes
+    autoclean: yes
+- name: Install various packages
+  ansible.builtin.apt:
+    name:
+      - nload
+      - net-tools
+      - htop
+      - ncdu
+      - ranger
+      - tree
+      - neovim
+      - mosh
+      - zsh
+      - curl
+      - fzf
+      - wget

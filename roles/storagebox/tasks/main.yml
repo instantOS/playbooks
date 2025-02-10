@@ -1,4 +1,13 @@
 ---
+- name: Ensure cachefilesd is installed
+  apt:
+    name: cachefilesd
+    state: present
+- name: Enable cachefilesd
+  systemd:
+    name: cachefilesd
+    enabled: true
+    state: started
 - name: Ensure cifs-utils is installed
   apt:
     name: cifs-utils
@@ -31,8 +40,8 @@
 - name: Mount storagebox
   mount:
     path: /mnt/backup-server
-    src: "{{ backup_username }}.your-storagebox.de/backup"
+    src: "//{{ backup_username }}.your-storagebox.de/backup"
     fstype: cifs
-    opts: "iocharset=utf8,rw,credentials=/etc/backup-credentials.txt,uid={{ backup_user }},gid={{ backup_group }},file_mode=0660,dir_mode=0770"
+    opts: "iocharset=utf8,rw,fsc,credentials=/etc/backup-credentials.txt,uid={{ backup_user }},gid={{ backup_group }},file_mode=0660,dir_mode=0770"
     state: mounted
     boot: true
