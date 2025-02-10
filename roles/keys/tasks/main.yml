@@ -1,0 +1,12 @@
+---
+- name: Ensure ssh key is authorized
+  authorized_key:
+    user: "{{ item }}"
+    state: present
+    # TODO: make this a variable
+    key: "{{ lookup('file', '/home/benjamin/.ssh/id_rsa.pub') }}"
+  with_items:
+    # TODO: make these a variable
+    - benjamin
+    - paperbenni
+    - ubuntu

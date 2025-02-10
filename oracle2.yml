@@ -59,7 +59,7 @@
     - matterbridge
     - ubuntu
     - { role: storagebox, tags: storagebox }
-    - mumble
+    - { role: mumble, tags: mumble }
     - { role: minecraft, tags: minecraft }
     # - spigot
     - instantosmirror
