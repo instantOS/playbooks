@@ -50,6 +50,7 @@
 
   roles:
     - grog.sudo
+    - { role: bcachefs, tags: bcachefs }
     - geerlingguy.pip
     - geerlingguy.firewall
     - geerlingguy.certbot
@@ -58,6 +59,7 @@
     - geerlingguy.docker
     - matterbridge
     - ubuntu
+    - { role: bigwriteback, tags: bigwriteback }
     - { role: storagebox, tags: storagebox }
     - { role: mumble, tags: mumble }
     - { role: minecraft, tags: minecraft }

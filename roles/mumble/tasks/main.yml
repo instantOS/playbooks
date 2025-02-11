@@ -1,24 +1,24 @@
 ---
-- name: Ensure mumble-server directory exists
-  file:
-    path: /mnt/backup-server/mumble
-    state: directory
-    owner: 1001
-    group: 30001
+# - name: Ensure mumble-server directory exists
+#   file:
+#     path: /mnt/backup-server/mumble
+#     state: directory
+#     owner: 1001
+#     group: 30001
 - name: Ensure mumble is set up
   community.docker.docker_compose_v2:
     project_name: mumble
     definition:
       services:
         mumble-server:
-          user: 1001:30001
+          # user: 1001:30001
           image: mumblevoip/mumble-server:latest
           container_name: mumble-server
           restart: unless-stopped
           environment:
             - "MUMBLE_SUPERUSER_PASSWORD={{ mumble_password }}"
           volumes:
-            - "/mnt/backup-server/mumble:/data"
+            - "/data/mumble/data:/data"
           ports:
             - 64738:64738
             - 64738:64738/udp
