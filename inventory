@@ -1,5 +1,3 @@
-[hostunlimited]
-hostunlimited.paperbenni.xyz ansible_user=paperbenni
 
 [oracle1]
 video.paperbenni.xyz ansible_user=paperbenni
