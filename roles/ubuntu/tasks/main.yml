@@ -23,5 +23,6 @@
       - mosh
       - zsh
       - curl
+      - cron
       - fzf
       - wget

@@ -1,6 +1,6 @@
 ---
 - name: oracle 1 setup
-  hosts: oracle1
+  hosts: oracle2
   become: true
 
   vars:
@@ -54,6 +54,7 @@
         key: "{{ lookup('file', '/home/benjamin/.ssh/id_rsa.pub') }}"
 
   roles:
+    - ubuntu
     - grog.sudo
     - geerlingguy.pip
     - geerlingguy.firewall
@@ -62,7 +63,6 @@
     - geerlingguy.nginx
     - geerlingguy.swap
     - geerlingguy.docker
-    - ubuntu
     - earlyoom
 
   # tasks:
