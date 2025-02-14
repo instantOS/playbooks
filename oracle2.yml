@@ -58,11 +58,10 @@
     - grog.sudo
     - geerlingguy.pip
     - geerlingguy.firewall
-    - geerlingguy.certbot
     - geerlingguy.security
-    - geerlingguy.nginx
     - geerlingguy.swap
     - geerlingguy.docker
+    - { role: instantosmirror, tags: instantosmirror }
     - earlyoom
 
   # tasks:

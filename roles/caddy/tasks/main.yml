@@ -1,0 +1,30 @@
+- name: install various packages
+  apt:
+    name:
+      - rsync
+      - caddy
+- name: Ensure Caddy conf.d directory exists
+  file:
+    path: "{{ caddy_confd_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+- name: Create main Caddyfile with dynamic imports
+  copy:
+    dest: /etc/caddy/Caddyfile
+    content: |
+      {{ caddy_global_config }}
+      
+      # Automatically import all config fragments
+      import {{ caddy_confd_dir }}/*.caddy
+    owner: root
+    group: root
+    mode: '0644'
+  notify: reload caddy
+
+- name: Ensure Caddy service is enabled and running
+  systemd:
+    name: caddy
+    state: started
+    enabled: yes

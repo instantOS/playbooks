@@ -1,4 +1,14 @@
 ---
+- name: Create required directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /data/caddy/file
+    - /data/caddy/site
+    - /data/caddy/data
+    - /data/caddy/config
 - name: set up caddy
   docker_compose:
     project_name: caddy
