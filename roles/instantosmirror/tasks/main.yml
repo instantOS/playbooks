@@ -1,20 +1,22 @@
 ---
-- name: Ensure docroot exists
-  file:
-    path: "{{ nginx_docroot }}"
-    state: directory
-- name: copy nginx server config
-  template:
-    src: templates/https-files-snapdrop.conf.j2
-    dest: /etc/nginx/sites-enabled/https-letsencrypt.conf
-    mode: 0644
-  notify: restart nginx
-  tags:
-    - nginx
-- name: ensure all instantOS packages are in nginx
-  synchronize:
+- name: set up caddy
+  docker_compose:
+    project_name: caddy
+    definition:
+      version: "3.7"
+      services:
+        caddy:
+          image: caddy:latest
+          restart: unless-stopped
+          ports:
+            - "80:80"
+            - "443:443"
+          volumes:
+            - /data/caddy/file/Caddyfile:/etc/caddy/Caddyfile
+            - /data/caddy/site:/srv
+            - /data/caddy/data:/data
+            - /data/caddy/config:/config
+- name: ensure all instantOS packages are in caddy
+  copy:
     src: ~/instantbuild/
-    dest: /var/www/html/
-  tags:
-    - html
-    - instantos
+    dest: /data/caddy/site/

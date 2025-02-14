@@ -1,0 +1,6 @@
+---
+caddy_confd_dir: /etc/caddy/conf.d
+caddy_global_config: |
+  {
+    admin localhost:2019
+  }
