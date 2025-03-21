@@ -4,3 +4,6 @@ video.paperbenni.xyz ansible_user=paperbenni
 
 [oracle2]
 packages.instantos.io ansible_user=ubuntu
+
+[minecraft]
+minecraft.paperbenni.xyz ansible_user=ubuntu
