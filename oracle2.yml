@@ -5,9 +5,6 @@
 
   vars:
     swap_file_size_mb: '4096'
-    certbot_certs:
-      - domains:
-          - "packages.paperbenni.xyz"
     firewall_allowed_tcp_ports:
       - "22"
       - "25"
@@ -37,21 +34,6 @@
   vars_files:
     - vars/basics.yml
     - secrets.yml
-
-  pre_tasks:
-    - name: ensure apt cache is updated
-      apt: update_cache=true cache_valid_time=3600
-    - name: ensure paperbenni user exists
-      user:
-        name: paperbenni
-        state: present
-        groups: sudo
-        append: yes
-    - name: Ensure ssh key is authorized
-      authorized_key:
-        user: paperbenni
-        state: present
-        key: "{{ lookup('file', '/home/benjamin/.ssh/id_rsa.pub') }}"
 
   roles:
     - ubuntu
