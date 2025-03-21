@@ -21,7 +21,7 @@
             UID: "1001"
             GID: "30001"
             TYPE: "PAPER"
-            MEMORY: "10G"
+            MEMORY: "3G"
             MAX_PLAYERS: "50"
             MOTD: "paperbenni's minecraft server"
             ICON: "https://1.gravatar.com/avatar/bd4bcade88756feb3f21b0b97ff1225b47705f36\

@@ -1,4 +1,9 @@
 ---
+- name: Install rsync
+  apt:
+    name: 
+      - rsync
+    state: present
 - name: Create required directories
   file:
     path: "{{ item }}"
@@ -9,8 +14,22 @@
     - /data/caddy/site
     - /data/caddy/data
     - /data/caddy/config
+- name: Create Caddyfile with package configuration
+  copy:
+    dest: /data/caddy/file/Caddyfile
+    content: |
+      packages.instantos.io {
+          root * /srv/
+          file_server {
+              browse
+              precompressed br gzip
+          }
+          
+          encode gzip
+      }
+    mode: '0644'
 - name: set up caddy
-  docker_compose:
+  community.docker.docker_compose_v2:
     project_name: caddy
     definition:
       version: "3.7"
@@ -18,9 +37,7 @@
         caddy:
           image: caddy:latest
           restart: unless-stopped
-          ports:
-            - "80:80"
-            - "443:443"
+          network_mode: host  # Critical for direct port access
           volumes:
             - /data/caddy/file/Caddyfile:/etc/caddy/Caddyfile
             - /data/caddy/site:/srv
