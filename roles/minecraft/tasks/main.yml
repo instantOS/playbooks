@@ -33,3 +33,21 @@
           # allow attaching to the container
           stdin_open: true
           tty: true
+- name: update spigot plugins
+  copy:
+    src: "{{ mpm_dir }}/plugins/{{ item }}/{{ minecraft_version }}/{{ item }}.jar"
+    dest: "{{ plugin_dir }}/{{ item }}.jar"
+    owner: 1001
+    group: 30001
+  with_items:
+    - chat
+    - essentials
+    - floodgate
+    - geyser
+    - griefprevention
+    - luckperms
+    - slimefun
+    - vault
+    - viabackwards
+    - viarewind
+    - viaversion

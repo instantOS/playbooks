@@ -28,3 +28,5 @@
     - earlyoom
     - { role: storagebox, tags: storagebox }
     - {role: minecraft, tags: minecraft}
+  handlers:
+    - import_tasks: handlers/basics.yml

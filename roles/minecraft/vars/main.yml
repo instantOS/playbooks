@@ -1,0 +1,4 @@
+---
+mpm_dir: ~/workspace/mpm-repo
+minecraft_version: "1.21"
+plugin_dir: /mnt/backup-server/spigot/plugins
