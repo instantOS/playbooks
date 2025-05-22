@@ -29,7 +29,7 @@
             ONLINE_MODE: "false"
             DIFFICULTY: "3"
           volumes:
-            - "/mnt/backup-server/spigot:/data"
+            - "/apps/spigot/data:/data"
           # allow attaching to the container
           stdin_open: true
           tty: true
