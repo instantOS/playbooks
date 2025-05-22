@@ -1,6 +1,6 @@
 ---
-- name: oracle 1 setup
-  hosts: oracle2
+- name: instantos server setup
+  hosts: instantos
   become: true
 
   vars:

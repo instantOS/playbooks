@@ -2,7 +2,7 @@
 [oracle1]
 video.paperbenni.xyz ansible_user=paperbenni
 
-[oracle2]
+[instantos]
 packages.instantos.io ansible_user=ubuntu
 
 [minecraft]
