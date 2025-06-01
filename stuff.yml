@@ -1,6 +1,6 @@
 ---
-- name: Minecraft setup
-  hosts: minecraft
+- name: Stuff setup
+  hosts: stuff
   become: true
   vars_files:
     - vars/basics.yml
@@ -27,6 +27,5 @@
     - geerlingguy.docker
     - earlyoom
     - { role: storagebox, tags: storagebox }
-    - {role: minecraft, tags: minecraft}
   handlers:
     - import_tasks: handlers/basics.yml
