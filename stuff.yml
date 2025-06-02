@@ -1,12 +1,12 @@
 ---
-- name: Minecraft setup
-  hosts: minecraft
+- name: Stuff setup
+  hosts: stuff
   become: true
   vars_files:
     - vars/basics.yml
     - secrets.yml
   vars:
-    swap_file_size_mb: '8192'
+    swap_file_size_mb: '4096'
     firewall_allowed_tcp_ports:
       - "22" # ssh
       - "25565" # minecraft
@@ -27,6 +27,5 @@
     - geerlingguy.docker
     - earlyoom
     - { role: storagebox, tags: storagebox }
-    # - { role: minecraft, tags: minecraft }
   handlers:
     - import_tasks: handlers/basics.yml

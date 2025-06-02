@@ -7,3 +7,6 @@ packages.instantos.io ansible_user=ubuntu
 
 [minecraft]
 minecraft.paperbenni.xyz ansible_user=ubuntu
+
+[stuff]
+stuff.paperbenni.xyz ansible_user=ubuntu
