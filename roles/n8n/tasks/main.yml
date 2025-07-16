@@ -1,0 +1,33 @@
+---
+- name: Ensure n8n is set up
+  community.docker.docker_compose_v2:
+    project_name: n8n
+    definition:
+      services:
+        n8n:
+          image: docker.n8n.io/n8nio/n8n
+          restart: always
+          ports:
+            - "5678:5678"
+          environment:
+            - N8N_HOST=n8n.paperbenni.xyz
+            - N8N_PORT=5678
+            - N8N_PROTOCOL=https
+            - NODE_ENV=production
+            - WEBHOOK_URL=https://n8n.paperbenni.xyz/
+            - DOMAIN_NAME=paperbenni.xyz
+            - SUBDOMAIN=n8n
+            - GENERIC_TIMEZONE=Europe/Berlin
+            - SSL_EMAIL=paperbenni@gmail.com
+          volumes:
+            - n8n_data:/home/node/.n8n
+            - /apps/n8n/files:/files
+      volumes:
+        n8n_data:
+- name: Add n8n to caddy
+  ansible.builtin.copy:
+    dest: /etc/caddy/conf.d/n8n.caddy
+    content: |
+      n8n.paperbenni.xyz {
+      reverse_proxy localhost:8081
+      }
