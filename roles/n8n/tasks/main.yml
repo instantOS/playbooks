@@ -29,5 +29,5 @@
     dest: /etc/caddy/conf.d/n8n.caddy
     content: |
       n8n.paperbenni.xyz {
-      reverse_proxy localhost:8081
+      reverse_proxy localhost:5678
       }
