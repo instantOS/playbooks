@@ -25,6 +25,8 @@
     - geerlingguy.security
     - geerlingguy.swap
     - geerlingguy.docker
+    - caddy
+    - litellm
     - earlyoom
     - { role: storagebox, tags: storagebox }
   handlers:
