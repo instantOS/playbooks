@@ -9,6 +9,7 @@
   ansible.builtin.copy:
     dest: /apps/litellm/config.yaml
     content: |
+      store_model_in_db: true
       model_list:
         - model_name: github_copilot/gpt-5
           litellm_params:
@@ -53,6 +54,7 @@
           command:
             - "--config=/app/config.yaml"
           environment:
+            - STORE_MODEL_IN_DB=True
             - "LITELLM_MASTER_KEY={{ litellm_key }}"
             - "LITELLM_SALT_KEY={{ litellm_salt }}"
             - "DATABASE_URL=postgresql://litellm:{{ litellm_password }}@db:5432/litellm"
