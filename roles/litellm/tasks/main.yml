@@ -13,6 +13,10 @@
         - model_name: github_copilot/gpt-5
           litellm_params:
             model: github_copilot/gpt-5
+      model_list:
+        - model_name: github_copilot/gpt-4
+          litellm_params:
+            model: github_copilot/gpt-4
     mode: "0644"
 
 - name: Ensure litellm is set up
