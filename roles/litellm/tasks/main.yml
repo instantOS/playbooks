@@ -1,4 +1,20 @@
 ---
+- name: Create litellm config directory
+  ansible.builtin.file:
+    path: /apps/litellm
+    state: directory
+    mode: "0755"
+
+- name: Create litellm config file
+  ansible.builtin.copy:
+    dest: /apps/litellm/config.yaml
+    content: |
+      model_list:
+        - model_name: github_copilot/gpt-5
+          litellm_params:
+            model: github_copilot/gpt-5
+    mode: "0644"
+
 - name: Ensure litellm is set up
   community.docker.docker_compose_v2:
     project_name: litellm
@@ -15,7 +31,7 @@
             - POSTGRES_DB=litellm
             - "POSTGRES_PASSWORD={{ litellm_password }}"
           healthcheck:
-            test: ["CMD-SHELL", "pg_isready -d litellm -U llmproxy"]
+            test: ["CMD-SHELL", "pg_isready -d litellm -U litellm"]
             interval: 1s
             timeout: 5s
             retries: 10
@@ -23,15 +39,23 @@
           image: ghcr.io/berriai/litellm:main-stable
           ports:
             - "4000:4000"
+          volumes:
+            - "/apps/litellm/config.yaml:/app/config.yaml:ro"
+          command:
+            - "--config=/app/config.yaml"
           environment:
             - "LITELLM_MASTER_KEY={{ litellm_key }}"
             - "LITELLM_SALT_KEY={{ litellm_salt }}"
             - "DATABASE_URL=postgresql://litellm:{{ litellm_password }}@db:5432/litellm"
           depends_on:
             - db
-          healthcheck:  
-            test: [ "CMD-SHELL", "wget --no-verbose --tries=1 http://localhost:4000/health/liveliness || exit 1" ]  
-            interval: 30s  
+          healthcheck:
+            test:
+              [
+                "CMD-SHELL",
+                "wget --no-verbose --tries=1 http://localhost:4000/health/liveliness || exit 1",
+              ]
+            interval: 30s
             timeout: 10s
             retries: 3
             start_period: 40s
