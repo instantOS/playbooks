@@ -13,10 +13,11 @@
         - model_name: github_copilot/gpt-5
           litellm_params:
             model: github_copilot/gpt-5
-      model_list:
+            extra_headers: {"Editor-Version": "vscode/1.85.1", "Copilot-Integration-Id": "vscode-chat"}
         - model_name: github_copilot/gpt-4
           litellm_params:
             model: github_copilot/gpt-4
+            extra_headers: {"Editor-Version": "vscode/1.85.1", "Copilot-Integration-Id": "vscode-chat"}
     mode: "0644"
 
 - name: Ensure litellm is set up
@@ -50,7 +51,7 @@
           environment:
             - "LITELLM_MASTER_KEY={{ litellm_key }}"
             - "LITELLM_SALT_KEY={{ litellm_salt }}"
-            - "DATABASE_URL=postgresql://litellm:{{ litellm_password }}@db:5432/litellm"
+            # - "DATABASE_URL=postgresql://litellm:{{ litellm_password }}@db:5432/litellm"
           depends_on:
             - db
           healthcheck:
