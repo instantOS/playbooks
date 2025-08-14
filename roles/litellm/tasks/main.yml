@@ -14,6 +14,10 @@
           litellm_params:
             model: github_copilot/gpt-5
             extra_headers: {"Editor-Version": "vscode/1.85.1", "Copilot-Integration-Id": "vscode-chat"}
+        - model_name: github_copilot/gpt-4.1
+          litellm_params:
+            model: github_copilot/gpt-4.1
+            extra_headers: {"Editor-Version": "vscode/1.85.1", "Copilot-Integration-Id": "vscode-chat"}
         - model_name: github_copilot/gpt-4
           litellm_params:
             model: github_copilot/gpt-4
