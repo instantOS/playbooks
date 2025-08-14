@@ -1,0 +1,39 @@
+---
+- name: Ensure litellm is set up
+  community.docker.docker_compose_v2:
+    project_name: litellm
+    definition:
+      services:
+        db:
+          image: postgres:16
+          volumes:
+            - /apps/litellm/db:/var/lib/postgresql/data
+          ports:
+            - "5432:5432"
+          environment:
+            - POSTGRES_USER=litellm
+            - POSTGRES_DB=litellm
+            - POSTGRES_PASSWORD=changeme
+          healthcheck:
+            test: ["CMD-SHELL", "pg_isready -d litellm -U llmproxy"]
+            interval: 1s
+            timeout: 5s
+            retries: 10
+        litellm:
+          image: ghcr.io/berriai/litellm:main-stable
+          ports:
+            - "4000:4000"
+          environment:
+            - LITELLM_MASTER_KEY=changeme
+            - LITELLM_SALT_KEY=changeme
+            - "DATABASE_URL=postgresql://litellm:changeme@db:5432/litellm"
+          depends_on:
+            - db
+          healthcheck:  
+            test: [ "CMD-SHELL", "wget --no-verbose --tries=1 http://localhost:4000/health/liveliness || exit 1" ]  
+            interval: 30s  
+            timeout: 10s
+            retries: 3
+            start_period: 40s
+
+# TODO: add caddy
