@@ -13,7 +13,7 @@
           environment:
             - POSTGRES_USER=litellm
             - POSTGRES_DB=litellm
-            - POSTGRES_PASSWORD=changeme
+            - "POSTGRES_PASSWORD={{ litellm_password }}"
           healthcheck:
             test: ["CMD-SHELL", "pg_isready -d litellm -U llmproxy"]
             interval: 1s
@@ -24,9 +24,9 @@
           ports:
             - "4000:4000"
           environment:
-            - LITELLM_MASTER_KEY=changeme
-            - LITELLM_SALT_KEY=changeme
-            - "DATABASE_URL=postgresql://litellm:changeme@db:5432/litellm"
+            - "LITELLM_MASTER_KEY={{ litellm_key }}"
+            - "LITELLM_SALT_KEY={{ litellm_salt }}"
+            - "DATABASE_URL=postgresql://litellm:{{ litellm_password }}@db:5432/litellm"
           depends_on:
             - db
           healthcheck:  
@@ -35,5 +35,10 @@
             timeout: 10s
             retries: 3
             start_period: 40s
-
-# TODO: add caddy
+- name: Add litellm to caddy
+  ansible.builtin.copy:
+    dest: /etc/caddy/conf.d/litellm.caddy
+    content: |
+      litellm.paperbenni.xyz {
+      reverse_proxy localhost:4000
+      }
