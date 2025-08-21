@@ -39,21 +39,9 @@
     - secrets.yml
 
   pre_tasks:
-    - name: ensure apt cache is updated
-      apt: update_cache=true cache_valid_time=3600
-    - name: ensure paperbenni user exists
-      user:
-        name: paperbenni
-        state: present
-        groups: sudo
-        append: yes
-    - name: Ensure ssh key is authorized
-      authorized_key:
-        user: paperbenni
-        state: present
-        key: "{{ lookup('file', '/home/benjamin/.ssh/id_rsa.pub') }}"
 
   roles:
+    - ubuntu
     - grog.sudo
     - geerlingguy.pip
     - geerlingguy.firewall
@@ -62,22 +50,14 @@
     - geerlingguy.nginx
     - geerlingguy.swap
     - geerlingguy.docker
-    - robertdebock.cargo
+    - earlyoom
 
   tasks:
+    # TODO: replace with caddy
     - name: Ensure docroot exists
       file:
         path: "{{ nginx_docroot }}"
         state: directory
-    - name: Install apache httpd  (state=present is optional)
-      ansible.builtin.apt:
-        name: earlyoom
-        state: present
-    - name: Make sure earlyoom is running
-      ansible.builtin.systemd:
-        state: started
-        enabled: true
-        name: earlyoom
     - name: copy nginx server config
       template:
         src: templates/nginx.conf.j2

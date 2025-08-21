@@ -1,20 +1,49 @@
 ---
-- name: Ensure docroot exists
+- name: Install rsync
+  apt:
+    name: 
+      - rsync
+    state: present
+- name: Create required directories
   file:
-    path: "{{ nginx_docroot }}"
+    path: "{{ item }}"
     state: directory
-- name: copy nginx server config
-  template:
-    src: templates/https-files-snapdrop.conf.j2
-    dest: /etc/nginx/sites-enabled/https-letsencrypt.conf
-    mode: 0644
-  notify: restart nginx
-  tags:
-    - nginx
-- name: ensure all instantOS packages are in nginx
-  synchronize:
+    mode: '0755'
+  loop:
+    - /data/caddy/file
+    - /data/caddy/site
+    - /data/caddy/data
+    - /data/caddy/config
+- name: Create Caddyfile with package configuration
+  copy:
+    dest: /data/caddy/file/Caddyfile
+    content: |
+      packages.instantos.io {
+          root * /srv/
+          file_server {
+              browse
+              precompressed br gzip
+          }
+          
+          encode gzip
+      }
+    mode: '0644'
+- name: set up caddy
+  community.docker.docker_compose_v2:
+    project_name: caddy
+    definition:
+      version: "3.7"
+      services:
+        caddy:
+          image: caddy:latest
+          restart: unless-stopped
+          network_mode: host  # Critical for direct port access
+          volumes:
+            - /data/caddy/file/Caddyfile:/etc/caddy/Caddyfile
+            - /data/caddy/site:/srv
+            - /data/caddy/data:/data
+            - /data/caddy/config:/config
+- name: ensure all instantOS packages are in caddy
+  copy:
     src: ~/instantbuild/
-    dest: /var/www/html/
-  tags:
-    - html
-    - instantos
+    dest: /data/caddy/site/

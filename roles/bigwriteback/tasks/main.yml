@@ -1,0 +1,11 @@
+- name: Set VM dirty memory parameters
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { name: vm.dirty_background_bytes, value: 204800000 }
+    - { name: vm.dirty_bytes, value: 819200000 }
+    - { name: vm.dirty_writeback_centisecs, value: 3000 }
+  become: true
+  notify: apply sysctl changes

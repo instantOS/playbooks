@@ -1,0 +1,6 @@
+---
+- name: reload caddy
+  command: caddy reload --config /etc/caddy/Caddyfile
+  become: true
+  become_user: root
+  ignore_errors: true

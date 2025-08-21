@@ -1,51 +1,25 @@
 ---
-- name: Ensure needed packages are installed
-  apt:
-    name:
-      - curl
-      - cockpit
-      - python3-venv
-      - opus-tools
-      - nload
-      - npm
-      - nginx-extras
-      - htop
-      - jq
-      - ffmpeg
-      - python3-virtualenv
-      - zsh
-      - mumble-server
-- name: ensure mumble-server has required permissions
-  debconf:
-    name: mumble-server/use_capabilities
-    question: mumble-server/use_capabilities
-    value: "true"
-    vtype: select
-- name: ensure mumble-server autostarts daemon
-  debconf:
-    name: mumble-server/start_daemon
-    question: mumble-server/start_daemon
-    value: "true"
-    vtype: select
-- name: ensure mumble server superuser password is set
-  debconf:
-    name: mumble-server/password
-    question: mumble-server/password
-    value: "{{ mumble_password }}"
-    vtype: password
-  no_log: True
-- name: install mumble-server config
-  template:
-    src: templates/mumble-server.ini.j2
-    dest: /etc/mumble-server.ini
-    mode: 0644
-  notify: restart mumble
-- name: ensure opt programs directory exists
-  file:
-    name: /opt/programs
-    state: directory
-- name: ensure mumble server is enabled
-  systemd:
-    state: started
-    enabled: yes
-    name: mumble-server
+# - name: Ensure mumble-server directory exists
+#   file:
+#     path: /mnt/backup-server/mumble
+#     state: directory
+#     owner: 1001
+#     group: 30001
+- name: Ensure mumble is set up
+  community.docker.docker_compose_v2:
+    project_name: mumble
+    definition:
+      services:
+        mumble-server:
+          # user: 1001:30001
+          image: mumblevoip/mumble-server:latest
+          container_name: mumble-server
+          restart: unless-stopped
+          environment:
+            - "MUMBLE_SUPERUSER_PASSWORD={{ mumble_password }}"
+          volumes:
+            - "/data/mumble/data:/data"
+          ports:
+            - 64738:64738
+            - 64738:64738/udp
+

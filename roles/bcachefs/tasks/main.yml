@@ -1,0 +1,67 @@
+---
+- name: Install required packages
+  apt:
+    name: 
+      - bcachefs-tools
+      - util-linux
+    state: present
+- name: Create foreground device file
+  command: "fallocate -l {{ foreground_device_size_gb }}G {{ foreground_file_path }}"
+  args:
+    creates: "{{ foreground_file_path }}"
+- name: Check if foreground loop device exists
+  shell: "losetup -j {{ foreground_file_path }} | grep .."
+  register: foreground_loop_check
+  ignore_errors: true
+  changed_when: false
+- name: Set up foreground loopback device persistently
+  command: "losetup -P -f {{ foreground_file_path }}" # -P for partition table syncing
+  register: foreground_loop
+  when: foreground_loop_check.rc != 0
+- name: Get foreground loop device path
+  shell: "losetup -j {{ foreground_file_path }} | cut -d ':' -f 1"
+  register: foreground_loop_path
+  changed_when: false
+
+- name: Create background device file on CIFS
+  command: "fallocate -l {{ background_device_size_gb }}G {{ cifs_mount_point }}/{{ cifs_storage_file }}"
+  args:
+    creates: "{{ cifs_mount_point }}/{{ cifs_storage_file }}"
+- name: Check if background loop device exists
+  shell: "losetup -j {{ cifs_mount_point }}/{{ cifs_storage_file }} | grep .."
+  register: background_loop_check
+  ignore_errors: true
+  changed_when: false
+- name: Set up background loopback device persistently
+  command: "losetup -P -f {{ cifs_mount_point }}/{{ cifs_storage_file }}" # -P for partition table syncing
+  register: background_loop
+  when: background_loop_check.rc != 0
+- name: Get background loop device path
+  shell: "losetup -j {{ cifs_mount_point }}/{{ cifs_storage_file }} | cut -d ':' -f 1"
+  register: background_loop_path
+  changed_when: false
+
+- name: Create bcachefs mount point
+  file:
+    path: "{{ bcachefs_mount_point }}"
+    state: directory
+    mode: '0755'
+- name: Format bcachefs filesystem
+  command: >
+    bcachefs format
+    --label=cache {{ foreground_loop_path.stdout }}
+    --label=background {{ background_loop_path.stdout }}
+    --foreground_target={{ foreground_loop_path.stdout }}
+    --background_target={{ background_loop_path.stdout }}
+- name: Add bcachefs mount to fstab
+  lineinfile:
+    path: /etc/fstab
+    line: "{{ foreground_loop_path.stdout }},{{ background_loop_path.stdout }} {{ bcachefs_mount_point }} bcachefs defaults 0 0"
+    regexp: "^.*{{ bcachefs_mount_point }}.*$"
+
+- name: Mount bcachefs filesystem
+  mount:
+    path: "{{ bcachefs_mount_point }}"
+    src: "{{ foreground_loop_path.stdout }}:{{ background_loop_path.stdout }}"
+    fstype: bcachefs
+    state: mounted

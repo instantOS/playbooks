@@ -1,0 +1,68 @@
+---
+- name: instantos server setup
+  hosts: instantos
+  become: true
+
+  vars:
+    swap_file_size_mb: '4096'
+    firewall_allowed_tcp_ports:
+      - "22"
+      - "25"
+      - "80"
+      - "443"
+      - "25565"
+      - "42695"
+      - "3000"
+      - "64738"
+      - "8008"
+      - "8085"
+      - "8080"
+      - "8096"
+      - "8888"
+      - "9005"
+      - "1935"
+      - "19132"
+      - "8000"
+      - "8443"
+    firewall_allowed_udp_ports:
+      - "64738"
+      - "1935"
+      - "25565"
+      - "19132"
+    firewall_flush_rules_and_chains: true
+
+  vars_files:
+    - vars/basics.yml
+    - secrets.yml
+
+  roles:
+    - ubuntu
+    - grog.sudo
+    - geerlingguy.pip
+    - geerlingguy.firewall
+    - geerlingguy.security
+    - geerlingguy.swap
+    - geerlingguy.docker
+    - { role: instantosmirror, tags: instantosmirror }
+    - earlyoom
+
+  # tasks:
+  #   # TODO: replace with caddy
+  #   - name: Ensure docroot exists
+  #     file:
+  #       path: "{{ nginx_docroot }}"
+  #       state: directory
+  #   - name: copy nginx server config
+  #     template:
+  #       src: templates/nginx.conf.j2
+  #       dest: /etc/nginx/nginx.conf
+  #       mode: 0644
+  #     notify: restart nginx
+  #   - name: copy nginx site
+  #     template:
+  #       src: templates/https-letsencrypt.conf.j2
+  #       dest: /etc/nginx/sites-enabled/https-letsencrypt.conf
+  #       mode: 0644
+  #     notify: restart nginx
+  # handlers:
+  #   - import_tasks: handlers/basics.yml

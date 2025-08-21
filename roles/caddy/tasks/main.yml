@@ -1,24 +1,30 @@
----
-- name: set up caddy
-  docker_compose:
-    project_name: caddy
-    definition:
-      version: "3.7"
-      services:
-        caddy:
-          image: caddy:latest
-          restart: unless-stopped
-          ports:
-            - "80:80"
-            - "443:443"
-          volumes:
-            - /data/caddy/file/Caddyfile:/etc/caddy/Caddyfile
-            - /data/caddy/site:/srv
-            - /data/caddy/data:/data
-            - /data/caddy/config:/config
-- name: ensure all instantOS packages are in caddy
+- name: install various packages
+  apt:
+    name:
+      - rsync
+      - caddy
+- name: Ensure Caddy conf.d directory exists
+  file:
+    path: "{{ caddy_confd_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+- name: Create main Caddyfile with dynamic imports
   copy:
-    src: ~/instantbuild/
-    dest: /data/caddy/site/
-  tags:
-    - html
+    dest: /etc/caddy/Caddyfile
+    content: |
+      {{ caddy_global_config }}
+      
+      # Automatically import all config fragments
+      import {{ caddy_confd_dir }}/*.caddy
+    owner: root
+    group: root
+    mode: '0644'
+  notify: reload caddy
+
+- name: Ensure Caddy service is enabled and running
+  systemd:
+    name: caddy
+    state: started
+    enabled: yes

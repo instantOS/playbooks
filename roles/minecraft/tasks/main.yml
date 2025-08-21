@@ -1,0 +1,47 @@
+---
+- name: Ensure paperspigot server is set up
+  community.docker.docker_compose_v2:
+    project_name: minecraft
+    definition:
+      services:
+        mc:
+          image: itzg/minecraft-server
+          container_name: minecraft
+          restart: unless-stopped
+          ports:
+            - "25565:25565"
+          environment:
+            EULA: "TRUE"
+            UID: "1001"
+            GID: "30001"
+            TYPE: "PAPER"
+            MEMORY: "10G"
+            MAX_PLAYERS: "50"
+            MOTD: "paperbenni's minecraft server"
+            ICON: "https://1.gravatar.com/avatar/bd4bcade88756feb3f21b0b97ff1225b47705f36\
+              5691be12da2ffea5da6ddbd3?size=256"
+            ONLINE_MODE: "false"
+            DIFFICULTY: "3"
+          volumes:
+            - "/tank/data/spigot/data:/data"
+          # allow attaching to the container
+          stdin_open: true
+          tty: true
+- name: update spigot plugins
+  copy:
+    src: "{{ mpm_dir }}/plugins/{{ item }}/{{ minecraft_version }}/{{ item }}.jar"
+    dest: "{{ plugin_dir }}/{{ item }}.jar"
+    owner: 1001
+    group: 30001
+  with_items:
+    - chat
+    - essentials
+    - floodgate
+    - geyser
+    - griefprevention
+    - luckperms
+    - slimefun
+    - vault
+    - viabackwards
+    - viarewind
+    - viaversion

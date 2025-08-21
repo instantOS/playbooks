@@ -1,0 +1,19 @@
+---
+- name: Ensure terraria server is set up
+  community.docker.docker_compose_v2:
+    project_name: terraria
+    definition:
+      services:
+        terraria:
+          image: ghcr.io/beardedio/terraria:tshock-latest
+          ports:
+            - '7777:7777'
+          restart: unless-stopped
+          environment:
+            - world=testworld
+          volumes:
+            - $HOME/terraria/config:/config
+          tty: true
+          stdin_open: true
+  become: true
+  tags: terraria

@@ -1,0 +1,43 @@
+---
+- name: Update apt cache
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Upgrade packages
+  become: true
+  apt:
+    upgrade: "dist"
+    autoremove: yes
+    autoclean: yes
+- name: Install various packages
+  ansible.builtin.apt:
+    name:
+      - nload
+      - net-tools
+      - htop
+      - ncdu
+      - ranger
+      - tree
+      - neovim
+      - mosh
+      - zsh
+      - curl
+      - cron
+      - fzf
+      - wget
+- name: ensure ubuntu user exists
+  user:
+    name: paperbenni
+    state: present
+    groups: sudo
+    append: yes
+- name: Ensure ssh key is authorized
+  authorized_key:
+    user: ubuntu
+    state: present
+    key: "{{ lookup('file', '/home/benjamin/.ssh/id_rsa.pub') }}"
+- name: Install yazi
+  community.general.snap:
+    name: yazi
+    classic: true

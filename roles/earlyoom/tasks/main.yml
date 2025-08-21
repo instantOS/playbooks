@@ -1,0 +1,10 @@
+---
+- name: Install earlyoom
+  ansible.builtin.apt:
+    name: earlyoom
+    state: present
+- name: Make sure earlyoom is running
+  ansible.builtin.systemd:
+    state: started
+    enabled: true
+    name: earlyoom

@@ -1,0 +1,34 @@
+---
+- name: Minecraft setup
+  hosts: minecraft
+  become: true
+  vars_files:
+    - vars/basics.yml
+    - secrets.yml
+  vars:
+    swap_file_size_mb: '8192'
+    firewall_allowed_tcp_ports:
+      - "22" # ssh
+      - "25565" # minecraft
+      - "80" # http
+      - "443" # https
+      - "19132" # minecraft bedrock
+    firewall_allowed_udp_ports:
+      - "25565" # minecraft
+      - "19132" # minecraft bedrock
+    firewall_flush_rules_and_chains: true
+  roles:
+    - ubuntu
+    - grog.sudo
+    - geerlingguy.pip
+    - geerlingguy.firewall
+    - geerlingguy.security
+    - geerlingguy.swap
+    - geerlingguy.docker
+    - earlyoom
+    - { role: n8n, tags: n8n }
+    - { role: caddy, tags: caddy }
+    - { role: storagebox, tags: storagebox }
+    - { role: minecraft, tags: minecraft }
+  handlers:
+    - import_tasks: handlers/basics.yml
