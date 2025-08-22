@@ -19,6 +19,6 @@ roles:
   - name: robertdebock.cargo
     version: 3.1.6
   - name: grog.sudo
-    version: v1.7.0
+    version: v1.7.1
 
 

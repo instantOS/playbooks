@@ -51,6 +51,7 @@
             retries: 10
         litellm:
           image: ghcr.io/berriai/litellm:main-stable
+          pull_policy: always
           ports:
             - "4000:4000"
           volumes:
