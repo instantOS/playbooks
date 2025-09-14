@@ -27,6 +27,7 @@
     - geerlingguy.docker
     - earlyoom
     - { role: n8n, tags: n8n }
+    - { role: qemu, tags: qemu }
     - { role: caddy, tags: caddy }
     - { role: storagebox, tags: storagebox }
     - { role: minecraft, tags: minecraft }
