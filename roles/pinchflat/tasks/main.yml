@@ -1,0 +1,22 @@
+---
+- name: Ensure pinchflat is set up
+  community.docker.docker_compose_v2:
+    project_name: pinchflat
+    definition:
+      services:
+        pinchflat:
+          image: ghcr.io/kieraneglin/pinchflat:latest
+          environment:
+            - TZ=Europe/Berlin
+          ports:
+            - '8945:8945'
+          volumes:
+            - "/tank/data/pinchflat/config:/config"
+            - "/tank/data/pinchflat/config:/downloads"
+- name: Add pinchflat to caddy
+  ansible.builtin.copy:
+    dest: /etc/caddy/conf.d/pinchflat.caddy
+    content: |
+      pinchflat.paperbenni.xyz {
+      reverse_proxy localhost:8945
+      }
