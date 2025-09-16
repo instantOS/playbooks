@@ -15,6 +15,7 @@
       - "19132" # minecraft bedrock
     firewall_allowed_udp_ports:
       - "25565" # minecraft
+      - "51820" # Wireguard
       - "19132" # minecraft bedrock
     firewall_flush_rules_and_chains: true
   roles:
@@ -32,5 +33,6 @@
     - { role: storagebox, tags: storagebox }
     - { role: minecraft, tags: minecraft }
     - { role: pinchflat, tags: pinchflat }
+    - { role: wg-easy, tags: wg-easy }
   handlers:
     - import_tasks: handlers/basics.yml
