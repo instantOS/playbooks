@@ -24,3 +24,15 @@
     name: "ubuntu"
     groups: kvm
     append: yes
+- name: Ensure pool directory exists
+  file:
+    path: "{{ pool_path }}"
+    state: directory
+    mode: '0755'
+- name: Ensure storage pool bigpool is present, active and autostart
+  community.libvirt.virt_pool:
+    name: "{{ pool_name }}"
+    state: active
+    autostart: true
+    xml: "{{ lookup('template', 'bigpool_pool.xml.j2') }}"
+    uri: qemu:///system
