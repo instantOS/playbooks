@@ -33,7 +33,5 @@
 - name: Ensure storage pool bigpool is present, active and autostart
   community.libvirt.virt_pool:
     name: "{{ pool_name }}"
-    state: active
-    autostart: true
+    state: present
     xml: "{{ lookup('template', 'pool.xml.j2') }}"
-    uri: qemu:///system
