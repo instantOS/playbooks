@@ -48,8 +48,5 @@
     dest: /etc/caddy/conf.d/wg-easy.caddy
     content: |
       wg.paperbenni.xyz {
-      # since the container will share the network with wg-easy
-      # we can use the proper container name
-      reverse_proxy wg-easy:80
-      tls internal
+        reverse_proxy localhost:51821
       }
