@@ -34,5 +34,6 @@
     - { role: minecraft, tags: minecraft }
     - { role: pinchflat, tags: pinchflat }
     - { role: wg-easy, tags: wg-easy }
+    - { role: qemu, tags: qemu }
   handlers:
     - import_tasks: handlers/basics.yml
