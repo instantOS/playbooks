@@ -43,7 +43,6 @@
   roles:
     - ubuntu
     - grog.sudo
-    - geerlingguy.pip
     - geerlingguy.firewall
     - geerlingguy.certbot
     - geerlingguy.security

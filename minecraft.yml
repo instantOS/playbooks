@@ -21,7 +21,6 @@
   roles:
     - ubuntu
     - grog.sudo
-    # - geerlingguy.pip
     - geerlingguy.firewall
     - geerlingguy.security
     - geerlingguy.swap
