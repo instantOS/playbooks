@@ -1,14 +1,14 @@
 ---
 - name: Install rsync
   apt:
-    name: 
+    name:
       - rsync
     state: present
 - name: Create required directories
   file:
     path: "{{ item }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
   loop:
     - /data/caddy/file
     - /data/caddy/site
@@ -27,7 +27,7 @@
           
           encode gzip
       }
-    mode: '0644'
+    mode: "0644"
 - name: set up caddy
   community.docker.docker_compose_v2:
     project_name: caddy
@@ -37,7 +37,7 @@
         caddy:
           image: caddy:latest
           restart: unless-stopped
-          network_mode: host  # Critical for direct port access
+          network_mode: host # Critical for direct port access
           volumes:
             - /data/caddy/file/Caddyfile:/etc/caddy/Caddyfile
             - /data/caddy/site:/srv

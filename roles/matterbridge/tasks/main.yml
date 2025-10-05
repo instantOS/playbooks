@@ -17,5 +17,5 @@
           image: 42wim/matterbridge:stable
           restart: unless-stopped
           volumes:
-          - /apps/matterbridge/matterbridge.toml:/etc/matterbridge/matterbridge.toml:ro
+            - /apps/matterbridge/matterbridge.toml:/etc/matterbridge/matterbridge.toml:ro
       #    command: -debug

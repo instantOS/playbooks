@@ -11,17 +11,17 @@
   file:
     path: /data/jitsi/{{ item.name }}
     state: directory
-    mode: '0755'
+    mode: "0755"
   with_items:
-   - name: "web/crontabs"
-   - name: "web/letsencrypt"
-   - name: "transcripts"
-   - name: "prosody/config"
-   - name: "prosody/prosody-plugins-custom"
-   - name: "jicofo"
-   - name: "jvb"
-   - name: "jigasi"
-   - name: "jibri"
+    - name: "web/crontabs"
+    - name: "web/letsencrypt"
+    - name: "transcripts"
+    - name: "prosody/config"
+    - name: "prosody/prosody-plugins-custom"
+    - name: "jicofo"
+    - name: "jvb"
+    - name: "jigasi"
+    - name: "jibri"
   tags:
     - jitsi
 - name: copy docker compose project

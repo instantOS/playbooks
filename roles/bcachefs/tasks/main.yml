@@ -1,7 +1,7 @@
 ---
 - name: Install required packages
   apt:
-    name: 
+    name:
       - bcachefs-tools
       - util-linux
     state: present
@@ -45,7 +45,7 @@
   file:
     path: "{{ bcachefs_mount_point }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
 - name: Format bcachefs filesystem
   command: >
     bcachefs format
