@@ -31,8 +31,9 @@
     - { role: caddy, tags: caddy }
     - { role: storagebox, tags: storagebox }
     - { role: minecraft, tags: minecraft }
-    - { role: pinchflat, tags: pinchflat }
+    # - { role: pinchflat, tags: pinchflat }
     - { role: wg-easy, tags: wg-easy }
     - { role: qemu, tags: qemu }
+    - { role: litellm, tags: litellm }
   handlers:
     - import_tasks: handlers/basics.yml
