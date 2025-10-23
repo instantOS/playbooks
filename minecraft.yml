@@ -6,7 +6,7 @@
     - vars/basics.yml
     - secrets.yml
   vars:
-    swap_file_size_mb: '8192'
+    swap_file_size_mb: "8192"
     firewall_allowed_tcp_ports:
       - "22" # ssh
       - "25565" # minecraft

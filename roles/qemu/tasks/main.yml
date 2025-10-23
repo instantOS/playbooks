@@ -2,12 +2,12 @@
 - name: Install Qemu
   ansible.builtin.apt:
     name:
-    - qemu-kvm
-    - libvirt-daemon-system
-    - libvirt-clients
-    - bridge-utils
-    - virtinst
-    - python3-lxml
+      - qemu-kvm
+      - libvirt-daemon-system
+      - libvirt-clients
+      - bridge-utils
+      - virtinst
+      - python3-lxml
     update_cache: yes
     state: present
 - name: Ensure libvirtd service is started and enabled
@@ -29,7 +29,7 @@
   file:
     path: "{{ pool_path }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
 - name: Ensure storage pool bigpool is present, active and autostart
   community.libvirt.virt_pool:
     name: "{{ pool_name }}"
