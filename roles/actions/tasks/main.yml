@@ -10,7 +10,7 @@
           environment:
             REPO_URL: https://github.com/instantOS/instantCLI
             RUNNER_NAME: instantself
-            RUNNER_TOKEN: //TODO
+            RUNNER_TOKEN: "{{ github_actions_token }}"
             RUNNER_WORKDIR: /tmp/runner/work
             CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner/data # Required for persistence
             RUNNER_SCOPE: "repo"
