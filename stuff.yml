@@ -6,7 +6,7 @@
     - vars/basics.yml
     - secrets.yml
   vars:
-    swap_file_size_mb: '4096'
+    swap_file_size_mb: "4096"
     firewall_allowed_tcp_ports:
       - "22" # ssh
       - "25565" # minecraft
@@ -25,7 +25,6 @@
     - geerlingguy.swap
     - geerlingguy.docker
     - caddy
-    - { role: litellm, tags: litellm }
     - earlyoom
     - { role: storagebox, tags: storagebox }
   handlers:

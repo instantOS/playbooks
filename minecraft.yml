@@ -6,7 +6,7 @@
     - vars/basics.yml
     - secrets.yml
   vars:
-    swap_file_size_mb: '8192'
+    swap_file_size_mb: "8192"
     firewall_allowed_tcp_ports:
       - "22" # ssh
       - "25565" # minecraft
@@ -31,8 +31,9 @@
     - { role: caddy, tags: caddy }
     - { role: storagebox, tags: storagebox }
     - { role: minecraft, tags: minecraft }
-    - { role: pinchflat, tags: pinchflat }
+    # - { role: pinchflat, tags: pinchflat }
     - { role: wg-easy, tags: wg-easy }
     - { role: qemu, tags: qemu }
+    - { role: litellm, tags: litellm }
   handlers:
     - import_tasks: handlers/basics.yml

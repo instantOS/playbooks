@@ -2,7 +2,6 @@
 foreground_device_size_gb: 10
 background_device_size_gb: 100
 
-
 # Mount points and file paths
 foreground_file_path: "/foreground_device.img"
 bcachefs_mount_point: "/mnt/bcachefs"

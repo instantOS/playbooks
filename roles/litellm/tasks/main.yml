@@ -79,6 +79,6 @@
   ansible.builtin.copy:
     dest: /etc/caddy/conf.d/litellm.caddy
     content: |
-      litellm.paperbenni.xyz {
+      llm.paperbenni.xyz {
       reverse_proxy localhost:4000
       }

@@ -7,7 +7,7 @@
         terraria:
           image: ghcr.io/beardedio/terraria:tshock-latest
           ports:
-            - '7777:7777'
+            - "7777:7777"
           restart: unless-stopped
           environment:
             - world=testworld

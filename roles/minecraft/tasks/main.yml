@@ -18,7 +18,8 @@
             MEMORY: "10G"
             MAX_PLAYERS: "50"
             MOTD: "paperbenni's minecraft server"
-            ICON: "https://1.gravatar.com/avatar/bd4bcade88756feb3f21b0b97ff1225b47705f36\
+            ICON:
+              "https://1.gravatar.com/avatar/bd4bcade88756feb3f21b0b97ff1225b47705f36\
               5691be12da2ffea5da6ddbd3?size=256"
             ONLINE_MODE: "false"
             DIFFICULTY: "3"
