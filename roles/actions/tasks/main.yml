@@ -3,7 +3,7 @@
   community.docker.docker_compose_v2:
     project_name: actions
     definition:
-      version: '2.3'
+      version: "2.3"
       services:
         worker:
           image: myoung34/github-runner:latest
@@ -13,15 +13,15 @@
             RUNNER_TOKEN: //TODO
             RUNNER_WORKDIR: /tmp/runner/work
             CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner/data # Required for persistence
-            RUNNER_SCOPE: 'repo'
+            RUNNER_SCOPE: "repo"
             LABELS: linux,x64
           security_opt:
             # needed on SELinux systems to allow docker container to manage other docker containers
             - label:disable
           volumes:
-            - '/var/run/docker.sock:/var/run/docker.sock'
-            - '/runner/data:/runner/data' # required for persistence
-            - '/tmp/runner:/tmp/runner'
+            - "/var/run/docker.sock:/var/run/docker.sock"
+            - "/runner/data:/runner/data" # required for persistence
+            - "/tmp/runner:/tmp/runner"
             # note: a quirk of docker-in-docker is that this path
             # needs to be the same path on host and inside the container,
             # docker mgmt cmds run outside of docker but expect the paths from within
