@@ -41,3 +41,14 @@
   community.general.snap:
     name: yazi
     classic: true
+
+- name: Create monthly Docker image prune cronjob
+  cron:
+    name: "Docker image prune"
+    job: "docker image prune --all -f"
+    month: "*"
+    day: "1"
+    hour: "2"
+    minute: "0"
+    user: root
+    cron_file: docker-image-prune
