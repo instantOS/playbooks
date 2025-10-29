@@ -8,12 +8,14 @@
         worker:
           image: myoung34/github-runner:latest
           environment:
-            REPO_URL: https://github.com/instantOS/instantCLI
             RUNNER_NAME: instantself
-            ACCESS_TOKEN: "{{ github_actions_token }}"
             RUNNER_WORKDIR: /tmp/runner/work
             CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner/data # Required for persistence
-            RUNNER_SCOPE: "repo"
+            RUNNER_SCOPE: "org"
+            ORG_NAME: "instantOS"
+            APP_LOGIN: "instantOS"
+            APP_ID: 2201063
+            APP_PRIVATE_KEY: "{{ runner_key }}"
             LABELS: linux,x64
           security_opt:
             # needed on SELinux systems to allow docker container to manage other docker containers
