@@ -43,6 +43,7 @@
   roles:
     - ubuntu
     - grog.sudo
+    - { role: actions, tags: actions }
     - geerlingguy.firewall
     - geerlingguy.certbot
     - geerlingguy.security
