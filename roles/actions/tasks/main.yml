@@ -11,6 +11,7 @@
             RUNNER_NAME: instantself
             RUNNER_WORKDIR: /tmp/runner/work
             CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner/data # Required for persistence
+            DISABLE_AUTOMATIC_DEREGISTRATION: true
             RUNNER_SCOPE: "org"
             ORG_NAME: "instantOS"
             APP_LOGIN: "instantOS"
