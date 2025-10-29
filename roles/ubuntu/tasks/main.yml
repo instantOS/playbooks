@@ -52,3 +52,21 @@
     minute: "0"
     user: root
     cron_file: docker-image-prune
+- name: Create weekly Docker volume prune cronjob
+  cron:
+    name: "Docker volume prune"
+    job: "docker volume prune -f"
+    weekday: "0"
+    hour: "3"
+    minute: "0"
+    user: root
+    cron_file: docker-volume-prune
+- name: Create weekly Docker container prune cronjob
+  cron:
+    name: "Docker container prune"
+    job: "docker container prune -f"
+    weekday: "0"
+    hour: "3"
+    minute: "30"
+    user: root
+    cron_file: docker-container-prune
