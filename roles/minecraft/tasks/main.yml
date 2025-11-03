@@ -2,6 +2,7 @@
 - name: Ensure paperspigot server is set up
   community.docker.docker_compose_v2:
     project_name: minecraft
+    pull: "always"
     definition:
       services:
         mc:
