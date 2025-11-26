@@ -26,6 +26,7 @@
     - geerlingguy.docker
     - caddy
     - earlyoom
+    - { role: stuff-server, tags: stuff-server }
     - { role: storagebox, tags: storagebox }
   handlers:
     - import_tasks: handlers/basics.yml

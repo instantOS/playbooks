@@ -1,0 +1,23 @@
+---
+- name: Ensure /data/stuff directory exists
+  ansible.builtin.file:
+    path: /data/stuff
+    state: directory
+    mode: '0777'
+    owner: www-data
+    group: www-data
+
+- name: Add stuff.paperbenni.xyz to caddy
+  ansible.builtin.copy:
+    dest: /etc/caddy/conf.d/stuff.caddy
+    content: |
+      stuff.paperbenni.xyz {
+          root * /data/stuff
+          file_server {
+              browse
+          }
+
+          encode gzip zstd
+      }
+    mode: '0644'
+  notify: reload caddy
