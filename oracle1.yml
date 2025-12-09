@@ -4,7 +4,7 @@
   become: true
 
   vars:
-    swap_file_size_mb: "1024"
+    swap_file_size_mb: "3072"
     certbot_certs:
       - domains:
           - "video.paperbenni.xyz"
