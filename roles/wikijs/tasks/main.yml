@@ -1,0 +1,40 @@
+---
+- name: Ensure wiki.js is set up
+  community.docker.docker_compose_v2:
+    project_name: wikijs
+    definition:
+      services:
+        db:
+          image: postgres:15-alpine
+          environment:
+            POSTGRES_DB: wiki
+            POSTGRES_PASSWORD: "{{ wikijs_password }}"
+            POSTGRES_USER: wikijs
+          logging:
+            driver: none
+          restart: unless-stopped
+          volumes:
+            - /tank/data/wikijs/db-data:/var/lib/postgresql/data
+
+        wiki:
+          image: ghcr.io/requarks/wiki:2
+          depends_on:
+            - db
+          environment:
+            DB_TYPE: postgres
+            DB_HOST: db
+            DB_PORT: 5432
+            DB_USER: wikijs
+            DB_PASS: "{{ wikijs_password }}"
+            DB_NAME: wiki
+          restart: unless-stopped
+          ports:
+            - "8087:3000"
+
+- name: Add wiki.js to caddy
+  ansible.builtin.copy:
+    dest: /etc/caddy/conf.d/wikijs.caddy
+    content: |
+      wiki.paperbenni.xyz {
+      reverse_proxy localhost:8087
+      }
