@@ -17,7 +17,6 @@
       - net-tools
       - htop
       - ncdu
-      - ranger
       - tree
       - neovim
       - mosh
