@@ -35,8 +35,8 @@
             # CLOUDFLARE_REGION: "auto"
 
             # === Social Media API Settings
-            # X_API_KEY: ""
-            # X_API_SECRET: ""
+            X_API_KEY: "{{ x_app_id }}"
+            X_API_SECRET: "{{ x_app_secret }}"
             # LINKEDIN_CLIENT_ID: ""
             # LINKEDIN_CLIENT_SECRET: ""
             # REDDIT_CLIENT_ID: ""
