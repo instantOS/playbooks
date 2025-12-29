@@ -19,7 +19,7 @@
             REDIS_URL: "redis://postiz-redis:6379"
             BACKEND_INTERNAL_URL: "http://localhost:3000"
             IS_GENERAL: "true"
-            DISABLE_REGISTRATION: "false"
+            DISABLE_REGISTRATION: "true"
 
             # === Storage Settings
             STORAGE_PROVIDER: "local"

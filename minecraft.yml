@@ -36,5 +36,6 @@
     - { role: wg-easy, tags: wg-easy }
     - { role: qemu, tags: qemu }
     - { role: litellm, tags: litellm }
+    - { role: postiz, tags: postiz }
   handlers:
     - import_tasks: handlers/basics.yml
