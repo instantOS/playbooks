@@ -45,8 +45,8 @@
             # GITHUB_CLIENT_SECRET: ""
             # BEEHIIVE_API_KEY: ""
             # BEEHIIVE_PUBLICATION_ID: ""
-            # THREADS_APP_ID: ""
-            # THREADS_APP_SECRET: ""
+            THREADS_APP_ID: "{{ threads_app_id }}"
+            THREADS_APP_SECRET: "{{ threads_app_secret }}"
             FACEBOOK_APP_ID: "{{ facebook_app_id }}"
             FACEBOOK_APP_SECRET: "{{ facebook_app_secret }}"
             # YOUTUBE_CLIENT_ID: ""
@@ -63,9 +63,9 @@
             # SLACK_ID: ""
             # SLACK_SECRET: ""
             # SLACK_SIGNING_SECRET: ""
-            # MASTODON_URL: "https://mastodon.social"
-            # MASTODON_CLIENT_ID: ""
-            # MASTODON_CLIENT_SECRET: ""
+            MASTODON_URL: "https://mastodon.cloud"
+            MASTODON_CLIENT_ID: "{{ mastodon_client_id }}"
+            MASTODON_CLIENT_SECRET: "{{ mastodon_client_secret }}"
 
             # === OAuth & Authentik Settings
             # NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME: "Authentik"
