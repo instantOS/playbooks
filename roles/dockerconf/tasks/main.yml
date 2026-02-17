@@ -1,0 +1,36 @@
+---
+- name: Create Docker config directory
+  file:
+    path: /etc/docker
+    state: directory
+    mode: '0755'
+- name: Create Docker data directory
+  file:
+    path: "/tank/data/docker"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+- name: Configure Docker to store data on external drive
+  copy:
+    content: |
+      {
+        "data-root": "/tank/data/docker"
+      }
+    dest: /etc/docker/daemon.json
+    mode: '0644'
+  notify: Restart Docker
+  register: docker_configured
+- name: Flush Handlers
+  meta: flush_handlers
+  when: docker_configured.changed
+- name: Create monthly Docker image prune cronjob
+  cron:
+    name: "Docker image prune"
+    job: "docker image prune --all -f"
+    month: "*"
+    day: "1"
+    hour: "2"
+    minute: "0"
+    user: root
+    cron_file: docker-image-prune
