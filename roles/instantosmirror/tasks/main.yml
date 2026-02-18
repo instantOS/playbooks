@@ -31,6 +31,7 @@
 - name: set up caddy
   community.docker.docker_compose_v2:
     project_name: caddy
+    pull: "always"
     definition:
       version: "3.7"
       services:

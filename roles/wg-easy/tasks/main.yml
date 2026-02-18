@@ -2,6 +2,7 @@
 - name: Ensure wg-easy is set up
   community.docker.docker_compose_v2:
     project_name: wg-easy
+    pull: "always"
     definition:
       volumes:
         etc_wireguard:
