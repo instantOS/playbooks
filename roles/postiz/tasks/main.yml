@@ -1,4 +1,16 @@
 ---
+- name: Ensure dynamicconfig directory exists
+  ansible.builtin.file:
+    path: /tank/data/postiz/dynamicconfig
+    state: directory
+    mode: "0755"
+
+- name: Copy dynamicconfig files
+  ansible.builtin.copy:
+    src: "dynamicconfig/"
+    dest: /tank/data/postiz/dynamicconfig/
+    mode: "0644"
+
 - name: Ensure Postiz is running
   community.docker.docker_compose_v2:
     project_name: postiz
@@ -95,6 +107,10 @@
             # STRIPE_SIGNING_KEY: ""
             # STRIPE_SIGNING_KEY_CONNECT: ""
 
+            # === Temporal Settings
+            TEMPORAL_ADDRESS: "temporal:7233"
+            RUN_CRON: "true"
+
             # === Developer Settings
             NX_ADD_PLUGINS: false
 
@@ -117,6 +133,7 @@
             - 4007:5000
           networks:
             - postiz-network
+            - temporal-network
           depends_on:
             postiz-postgres:
               condition: service_healthy
@@ -216,7 +233,7 @@
           networks:
             - temporal-network
           volumes:
-            - ./dynamicconfig:/etc/temporal/config/dynamicconfig
+            - /tank/data/postiz/dynamicconfig:/etc/temporal/config/dynamicconfig
           labels:
             kompose.volume.type: configMap
 
