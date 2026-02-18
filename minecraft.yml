@@ -18,24 +18,51 @@
       - "51820" # Wireguard
       - "19132" # minecraft bedrock
     firewall_flush_rules_and_chains: true
+  pre_tasks:
+    - name: Create ZFS zvol for swap
+      community.general.zfs:
+        name: tank/data/swap
+        state: present
+        extra_zfs_properties:
+          volsize: "{{ swap_file_size_mb }}M"
+          compression: "off"
+          sync: always
+          primarycache: metadata
+          secondarycache: none
+
+    - name: Format zvol as swap
+      ansible.builtin.command: mkswap /dev/zvol/tank/data/swap
+      changed_when: false
+      when: ansible_swaptotal_mb < (swap_file_size_mb | int - 100)
+
+    - name: Enable swap on zvol
+      ansible.builtin.command: swapon /dev/zvol/tank/data/swap
+      changed_when: true
+      when: ansible_swaptotal_mb < (swap_file_size_mb | int - 100)
+
+    - name: Ensure swap zvol is in fstab
+      ansible.posix.mount:
+        path: none
+        src: /dev/zvol/tank/data/swap
+        fstype: swap
+        opts: defaults
+        state: present
   roles:
     - ubuntu
     - grog.sudo
     - geerlingguy.firewall
     - geerlingguy.security
-    - geerlingguy.swap
     - geerlingguy.docker
     - earlyoom
     - { role: n8n, tags: n8n }
     - { role: dockerconf, tags: dockerconf }
     - { role: wikijs, tags: wikijs }
-    - { role: qemu, tags: qemu }
+    # - { role: qemu, tags: qemu }
     - { role: caddy, tags: caddy }
     - { role: storagebox, tags: storagebox }
     - { role: minecraft, tags: minecraft }
     # - { role: pinchflat, tags: pinchflat }
     - { role: wg-easy, tags: wg-easy }
-    # - { role: qemu, tags: qemu }
     # - { role: litellm, tags: litellm }
     - { role: postiz, tags: postiz }
   handlers:
