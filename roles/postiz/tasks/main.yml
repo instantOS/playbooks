@@ -114,7 +114,7 @@
             - /tank/data/postiz/postiz-config:/config/
             - /tank/data/postiz/postiz-uploads:/uploads/
           ports:
-            - 5000:5000
+            - 4007:5000
           networks:
             - postiz-network
           depends_on:
@@ -254,5 +254,5 @@
     dest: /etc/caddy/conf.d/postiz.caddy
     content: |
       postiz.paperbenni.xyz {
-      reverse_proxy localhost:5000
+      reverse_proxy localhost:4007
       }
