@@ -54,6 +54,7 @@
     - geerlingguy.security
     - geerlingguy.docker
     - earlyoom
+    - { role: openclaw, tags: openclaw }
     - { role: n8n, tags: n8n }
     - { role: dockerconf, tags: dockerconf }
     - { role: wikijs, tags: wikijs }
