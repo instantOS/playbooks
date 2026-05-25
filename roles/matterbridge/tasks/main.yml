@@ -11,6 +11,7 @@
 - name: Ensure matterbridge is set up
   community.docker.docker_compose_v2:
     project_name: matterbridge
+    pull: "always"
     definition:
       services:
         matterbridge:

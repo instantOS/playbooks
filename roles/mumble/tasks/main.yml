@@ -7,6 +7,7 @@
 #     group: 30001
 - name: Ensure mumble is set up
   community.docker.docker_compose_v2:
+    pull: "always"
     project_name: mumble
     definition:
       services:

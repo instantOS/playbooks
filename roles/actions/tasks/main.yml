@@ -1,6 +1,7 @@
 ---
 - name: Ensure github actions runner is set up
   community.docker.docker_compose_v2:
+    pull: "always"
     project_name: actions
     definition:
       version: "2.3"

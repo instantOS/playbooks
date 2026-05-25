@@ -1,4 +1,16 @@
 ---
+- name: Ensure dynamicconfig directory exists
+  ansible.builtin.file:
+    path: /tank/data/postiz/dynamicconfig
+    state: directory
+    mode: "0755"
+
+- name: Copy dynamicconfig files
+  ansible.builtin.copy:
+    src: "dynamicconfig/"
+    dest: /tank/data/postiz/dynamicconfig/
+    mode: "0644"
+
 - name: Ensure Postiz is running
   community.docker.docker_compose_v2:
     project_name: postiz
@@ -95,6 +107,10 @@
             # STRIPE_SIGNING_KEY: ""
             # STRIPE_SIGNING_KEY_CONNECT: ""
 
+            # === Temporal Settings
+            TEMPORAL_ADDRESS: "temporal:7233"
+            RUN_CRON: "true"
+
             # === Developer Settings
             NX_ADD_PLUGINS: false
 
@@ -114,9 +130,10 @@
             - /tank/data/postiz/postiz-config:/config/
             - /tank/data/postiz/postiz-uploads:/uploads/
           ports:
-            - 5000:5000
+            - 4007:5000
           networks:
             - postiz-network
+            - temporal-network
           depends_on:
             postiz-postgres:
               condition: service_healthy
@@ -163,7 +180,90 @@
         #   image: ghcr.io/getsentry/spotlight:latest
         #   networks:
         #     - postiz-network
+        temporal-elasticsearch:
+          container_name: temporal-elasticsearch
+          image: elasticsearch:7.17.27
+          environment:
+            - cluster.routing.allocation.disk.threshold_enabled=true
+            - cluster.routing.allocation.disk.watermark.low=512mb
+            - cluster.routing.allocation.disk.watermark.high=256mb
+            - cluster.routing.allocation.disk.watermark.flood_stage=128mb
+            - discovery.type=single-node
+            - ES_JAVA_OPTS=-Xms256m -Xmx256m
+            - xpack.security.enabled=false
+          networks:
+            - temporal-network
+          expose:
+            - 9200
+          volumes:
+            - /tank/data/postiz/elasticsearch:/var/lib/elasticsearch/data
+
+        temporal-postgresql:
+          container_name: temporal-postgresql
+          image: postgres:16
+          environment:
+            POSTGRES_PASSWORD: temporal
+            POSTGRES_USER: temporal
+          networks:
+            - temporal-network
+          expose:
+            - 5432
+          volumes:
+            - /tank/data/postiz/postgres-temporal:/var/lib/postgresql/data
+
+        temporal:
+          container_name: temporal
+          ports:
+            - '7233:7233'
+          image: temporalio/auto-setup:1.28.1
+          depends_on:
+            - temporal-postgresql
+            - temporal-elasticsearch
+          environment:
+            - DB=postgres12
+            - DB_PORT=5432
+            - POSTGRES_USER=temporal
+            - POSTGRES_PWD=temporal
+            - POSTGRES_SEEDS=temporal-postgresql
+            - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
+            - ENABLE_ES=true
+            - ES_SEEDS=temporal-elasticsearch
+            - ES_VERSION=v7
+            - TEMPORAL_NAMESPACE=default
+          networks:
+            - temporal-network
+          volumes:
+            - /tank/data/postiz/dynamicconfig:/etc/temporal/config/dynamicconfig
+          labels:
+            kompose.volume.type: configMap
+
+        temporal-admin-tools:
+          container_name: temporal-admin-tools
+          image: temporalio/admin-tools:1.28.1-tctl-1.18.4-cli-1.4.1
+          environment:
+            - TEMPORAL_ADDRESS=temporal:7233
+            - TEMPORAL_CLI_ADDRESS=temporal:7233
+          networks:
+            - temporal-network
+          stdin_open: true
+          depends_on:
+            - temporal
+          tty: true
+
+        temporal-ui:
+          container_name: temporal-ui
+          image: temporalio/ui:2.34.0
+          environment:
+            - TEMPORAL_ADDRESS=temporal:7233
+            - TEMPORAL_CORS_ORIGINS=http://127.0.0.1:3000
+          networks:
+            - temporal-network
+          ports:
+            - '8080:8080'
       networks:
+        temporal-network:
+          driver: bridge
+          name: temporal-network
         postiz-network:
           external: false
 - name: Add postiz to caddy
@@ -171,5 +271,5 @@
     dest: /etc/caddy/conf.d/postiz.caddy
     content: |
       postiz.paperbenni.xyz {
-      reverse_proxy localhost:5000
+      reverse_proxy localhost:4007
       }
