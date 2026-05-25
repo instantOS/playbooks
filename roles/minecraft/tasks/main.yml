@@ -24,6 +24,7 @@
               5691be12da2ffea5da6ddbd3?size=256"
             ONLINE_MODE: "false"
             DIFFICULTY: "3"
+            VERSION: LATEST
           volumes:
             - "/tank/data/spigot/data:/data"
           # allow attaching to the container
