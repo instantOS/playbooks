@@ -65,6 +65,7 @@
     # - { role: pinchflat, tags: pinchflat }
     - { role: wg-easy, tags: wg-easy }
     # - { role: litellm, tags: litellm }
+    - { role: hermes, tags: hermes }
     - { role: postiz, tags: postiz }
   handlers:
     - import_tasks: handlers/basics.yml
