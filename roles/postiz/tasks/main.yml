@@ -11,6 +11,14 @@
     dest: /tank/data/postiz/dynamicconfig/
     mode: "0644"
 
+- name: Ensure elasticsearch data directory exists with correct ownership
+  ansible.builtin.file:
+    path: /tank/data/postiz/elasticsearch
+    state: directory
+    mode: "0775"
+    owner: "1000"
+    group: "1000"
+
 - name: Ensure Postiz is running
   community.docker.docker_compose_v2:
     project_name: postiz
