@@ -1,0 +1,2 @@
+---
+n8n_runners_auth_token: "{{ ('n8n-runners-' ~ inventory_hostname ~ (ansible_machine_id | default(''))) | hash('sha256') }}"
