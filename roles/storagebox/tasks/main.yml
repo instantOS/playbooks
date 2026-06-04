@@ -18,7 +18,7 @@
     state: present
 - name: Ensure kernel modules extra are installed
   apt:
-    name: "linux-modules-extra-{{ ansible_kernel }}"
+    name: "linux-modules-extra-{{ ansible_facts['kernel'] }}"
     state: present
 - name: Install storagebox credentials
   template:

@@ -38,12 +38,12 @@
     - name: Format zvol as swap
       ansible.builtin.command: mkswap /dev/zvol/tank/data/swap
       changed_when: false
-      when: ansible_swaptotal_mb < (swap_file_size_mb | int - 100)
+      when: ansible_facts["swaptotal_mb"] < (swap_file_size_mb | int - 100)
 
     - name: Enable swap on zvol
       ansible.builtin.command: swapon /dev/zvol/tank/data/swap
       changed_when: true
-      when: ansible_swaptotal_mb < (swap_file_size_mb | int - 100)
+      when: ansible_facts["swaptotal_mb"] < (swap_file_size_mb | int - 100)
 
     - name: Ensure swap zvol is in fstab
       ansible.posix.mount:
