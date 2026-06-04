@@ -9,5 +9,4 @@ format:
 
 lint:
     yamllint .
-    ansible-lint main.yml --exclude .ansible
-
+    ansible-lint axolotl.yml capybara.yml chungus.yml goose.yml turtle.yml --exclude .ansible

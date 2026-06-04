@@ -1,6 +1,6 @@
 ---
 - name: ensure snapdrop is running
-  docker_compose:
+  community.docker.docker_compose_v2:
     project_name: snapdrop
     definition:
       version: "2.1"
