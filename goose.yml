@@ -47,7 +47,8 @@
   roles:
     - ubuntu
     - grog.sudo
-    - { role: actions, tags: actions }
+    - role: actions
+      tags: actions
     - geerlingguy.firewall
     - geerlingguy.certbot
     - geerlingguy.security
@@ -61,6 +62,7 @@
       ansible.builtin.file:
         path: "{{ nginx_docroot }}"
         state: directory
+        mode: "0755"
     - name: Copy nginx server config
       ansible.builtin.template:
         src: templates/nginx.conf.j2
@@ -74,4 +76,5 @@
         mode: "0644"
       notify: restart nginx
   handlers:
-    - ansible.builtin.import_tasks: handlers/basics.yml
+    - name: Import basic handlers
+      ansible.builtin.import_tasks: handlers/basics.yml

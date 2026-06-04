@@ -31,7 +31,10 @@
     - geerlingguy.docker
     - caddy
     - earlyoom
-    - { role: stuff-server, tags: stuff-server }
-    - { role: storagebox, tags: storagebox }
+    - role: stuff-server
+      tags: stuff-server
+    - role: storagebox
+      tags: storagebox
   handlers:
-    - ansible.builtin.import_tasks: handlers/basics.yml
+    - name: Import basic handlers
+      ansible.builtin.import_tasks: handlers/basics.yml

@@ -1,6 +1,7 @@
 ---
-- name: reload caddy
-  command: caddy reload --config /etc/caddy/Caddyfile
+- name: Reload caddy
+  ansible.builtin.command: caddy reload --config /etc/caddy/Caddyfile
   become: true
   become_user: root
-  ignore_errors: true
+  changed_when: true
+  failed_when: false

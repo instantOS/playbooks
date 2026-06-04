@@ -48,5 +48,6 @@
     - geerlingguy.security
     - geerlingguy.swap
     - geerlingguy.docker
-    - { role: instantosmirror, tags: instantosmirror }
+    - role: instantosmirror
+      tags: instantosmirror
     - earlyoom

@@ -21,7 +21,7 @@
   copy:
     src: files/services/botamusique.service
     dest: /etc/systemd/system/botamusique.service
-    mode: 0644
+    mode: "0644"
 - name: Ensure systemd service is enabled
   systemd:
     state: started

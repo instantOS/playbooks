@@ -59,14 +59,24 @@
     - geerlingguy.security
     - geerlingguy.docker
     - earlyoom
-    - { role: n8n, tags: n8n }
-    - { role: dockerconf, tags: dockerconf }
-    - { role: wikijs, tags: wikijs }
-    - { role: caddy, tags: caddy }
-    - { role: storagebox, tags: storagebox }
-    - { role: minecraft, tags: minecraft }
-    - { role: wg-easy, tags: wg-easy }
-    - { role: hermes, tags: hermes }
-    - { role: postiz, tags: postiz }
+    - role: n8n
+      tags: n8n
+    - role: dockerconf
+      tags: dockerconf
+    - role: wikijs
+      tags: wikijs
+    - role: caddy
+      tags: caddy
+    - role: storagebox
+      tags: storagebox
+    - role: minecraft
+      tags: minecraft
+    - role: wg-easy
+      tags: wg-easy
+    - role: hermes
+      tags: hermes
+    - role: postiz
+      tags: postiz
   handlers:
-    - ansible.builtin.import_tasks: handlers/basics.yml
+    - name: Import basic handlers
+      ansible.builtin.import_tasks: handlers/basics.yml
