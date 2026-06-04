@@ -1,12 +1,14 @@
-
-[oracle1]
+[goose]
 video.paperbenni.xyz ansible_user=paperbenni
 
-[instantos]
+[capybara]
 packages.instantos.io ansible_user=ubuntu
 
-[minecraft]
+[chungus]
 minecraft.paperbenni.xyz ansible_user=ubuntu
 
-[stuff]
+[axolotl]
 stuff.paperbenni.xyz ansible_user=ubuntu
+
+[turtle]
+mc.paperbenni.xyz ansible_user=root ansible_host=185.122.57.167

@@ -1,11 +1,12 @@
 ---
-- name: Minecraft setup
-  hosts: minecraft
+- name: chungus setup
+  hosts: chungus
   become: true
   vars_files:
     - vars/basics.yml
     - secrets.yml
   vars:
+    hostname: chungus
     swap_file_size_mb: "8192"
     firewall_allowed_tcp_ports:
       - "22" # ssh
@@ -19,6 +20,10 @@
       - "19132" # minecraft bedrock
     firewall_flush_rules_and_chains: true
   pre_tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ hostname }}"
+
     - name: Create ZFS zvol for swap
       community.general.zfs:
         name: tank/data/swap
@@ -58,13 +63,10 @@
     - { role: n8n, tags: n8n }
     - { role: dockerconf, tags: dockerconf }
     - { role: wikijs, tags: wikijs }
-    # - { role: qemu, tags: qemu }
     - { role: caddy, tags: caddy }
     - { role: storagebox, tags: storagebox }
     - { role: minecraft, tags: minecraft }
-    # - { role: pinchflat, tags: pinchflat }
     - { role: wg-easy, tags: wg-easy }
-    # - { role: litellm, tags: litellm }
     - { role: postiz, tags: postiz }
   handlers:
     - import_tasks: handlers/basics.yml

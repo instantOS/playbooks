@@ -3,7 +3,7 @@
   ansible.builtin.file:
     path: /data/stuff
     state: directory
-    mode: '0777'
+    mode: "0777"
     owner: www-data
     group: www-data
 
@@ -19,5 +19,5 @@
 
           encode gzip zstd
       }
-    mode: '0644'
+    mode: "0644"
   notify: reload caddy

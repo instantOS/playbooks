@@ -1,9 +1,10 @@
 ---
-- name: oracle 1 setup
-  hosts: oracle1
+- name: goose setup
+  hosts: goose
   become: true
 
   vars:
+    hostname: goose
     swap_file_size_mb: "3072"
     certbot_certs:
       - domains:
@@ -39,6 +40,9 @@
     - secrets.yml
 
   pre_tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ hostname }}"
 
   roles:
     - ubuntu
@@ -53,7 +57,6 @@
     - earlyoom
 
   tasks:
-    # TODO: replace with caddy
     - name: Ensure docroot exists
       file:
         path: "{{ nginx_docroot }}"

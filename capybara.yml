@@ -1,9 +1,10 @@
 ---
-- name: instantos server setup
-  hosts: instantos
+- name: capybara setup
+  hosts: capybara
   become: true
 
   vars:
+    hostname: capybara
     swap_file_size_mb: "4096"
     firewall_allowed_tcp_ports:
       - "22"
@@ -35,6 +36,11 @@
     - vars/basics.yml
     - secrets.yml
 
+  pre_tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ hostname }}"
+
   roles:
     - ubuntu
     - grog.sudo
@@ -44,24 +50,3 @@
     - geerlingguy.docker
     - { role: instantosmirror, tags: instantosmirror }
     - earlyoom
-
-  # tasks:
-  #   # TODO: replace with caddy
-  #   - name: Ensure docroot exists
-  #     file:
-  #       path: "{{ nginx_docroot }}"
-  #       state: directory
-  #   - name: copy nginx server config
-  #     template:
-  #       src: templates/nginx.conf.j2
-  #       dest: /etc/nginx/nginx.conf
-  #       mode: 0644
-  #     notify: restart nginx
-  #   - name: copy nginx site
-  #     template:
-  #       src: templates/https-letsencrypt.conf.j2
-  #       dest: /etc/nginx/sites-enabled/https-letsencrypt.conf
-  #       mode: 0644
-  #     notify: restart nginx
-  # handlers:
-  #   - import_tasks: handlers/basics.yml

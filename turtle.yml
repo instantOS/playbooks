@@ -1,0 +1,33 @@
+---
+- name: turtle setup
+  hosts: turtle
+  become: true
+
+  vars:
+    hostname: turtle
+    swap_file_size_mb: "2048"
+    firewall_allowed_tcp_ports:
+      - "22"
+      - "25565"
+      - "80"
+      - "443"
+    firewall_allowed_udp_ports:
+      - "25565"
+    firewall_flush_rules_and_chains: true
+
+  vars_files:
+    - vars/basics.yml
+    - secrets.yml
+
+  pre_tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ hostname }}"
+
+  roles:
+    - grog.sudo
+    - geerlingguy.firewall
+    - geerlingguy.security
+    - geerlingguy.swap
+    - geerlingguy.docker
+    - earlyoom

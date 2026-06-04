@@ -171,7 +171,7 @@
           networks:
             - postiz-network
 
-      # For Application Monitoring / Debugging
+        # For Application Monitoring / Debugging
         # spotlight:
         #   pull_policy: always
         #   container_name: spotlight
@@ -214,7 +214,7 @@
         temporal:
           container_name: temporal
           ports:
-            - '7233:7233'
+            - "7233:7233"
           image: temporalio/auto-setup:1.28.1
           depends_on:
             - temporal-postgresql
@@ -259,7 +259,7 @@
           networks:
             - temporal-network
           ports:
-            - '8080:8080'
+            - "8080:8080"
       networks:
         temporal-network:
           driver: bridge

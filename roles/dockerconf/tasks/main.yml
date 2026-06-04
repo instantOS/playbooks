@@ -3,12 +3,12 @@
   file:
     path: /etc/docker
     state: directory
-    mode: '0755'
+    mode: "0755"
 - name: Create Docker data directory
   file:
     path: "/tank/data/docker"
     state: directory
-    mode: '0755'
+    mode: "0755"
     owner: root
     group: root
 - name: Configure Docker to store data on external drive
@@ -18,7 +18,7 @@
         "data-root": "/tank/data/docker"
       }
     dest: /etc/docker/daemon.json
-    mode: '0644'
+    mode: "0644"
 - name: Create monthly Docker image prune cronjob
   cron:
     name: "Docker image prune"

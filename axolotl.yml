@@ -1,11 +1,12 @@
 ---
-- name: Stuff setup
-  hosts: stuff
+- name: axolotl setup
+  hosts: axolotl
   become: true
   vars_files:
     - vars/basics.yml
     - secrets.yml
   vars:
+    hostname: axolotl
     swap_file_size_mb: "4096"
     firewall_allowed_tcp_ports:
       - "22" # ssh
@@ -17,6 +18,10 @@
       - "25565" # minecraft
       - "19132" # minecraft bedrock
     firewall_flush_rules_and_chains: true
+  pre_tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ hostname }}"
   roles:
     - ubuntu
     - grog.sudo
