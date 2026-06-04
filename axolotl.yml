@@ -1,5 +1,5 @@
 ---
-- name: axolotl setup
+- name: Axolotl setup
   hosts: axolotl
   become: true
   vars_files:
@@ -34,4 +34,4 @@
     - { role: stuff-server, tags: stuff-server }
     - { role: storagebox, tags: storagebox }
   handlers:
-    - import_tasks: handlers/basics.yml
+    - ansible.builtin.import_tasks: handlers/basics.yml

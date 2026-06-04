@@ -1,3 +1,4 @@
+---
 - name: Ensure OpenClaw is set up
   community.docker.docker_compose_v2:
     pull: "always"
@@ -33,16 +34,16 @@
             - "18790:18790"
           init: true
           restart: unless-stopped
-          command: [
-              # "sleep", "2000"
-              "node",
-              "dist/index.js",
-              "gateway",
-              "--bind",
-              "lan",
-              "--port",
-              "18789",
-            ]
+          command:
+            # - "sleep"
+            # - "2000"
+            - "node"
+            - "dist/index.js"
+            - "gateway"
+            - "--bind"
+            - "lan"
+            - "--port"
+            - "18789"
           healthcheck:
             test:
               [

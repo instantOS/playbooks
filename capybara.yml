@@ -1,5 +1,5 @@
 ---
-- name: capybara setup
+- name: Capybara setup
   hosts: capybara
   become: true
 

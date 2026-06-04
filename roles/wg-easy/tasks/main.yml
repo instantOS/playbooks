@@ -6,7 +6,6 @@
     definition:
       volumes:
         etc_wireguard:
-
       services:
         wg-easy:
           image: ghcr.io/wg-easy/wg-easy:15
@@ -46,6 +45,7 @@
 - name: Add wg-easy to caddy
   ansible.builtin.copy:
     dest: /etc/caddy/conf.d/wg-easy.caddy
+    mode: "0644"
     content: |
       wg.paperbenni.xyz {
         reverse_proxy localhost:51821

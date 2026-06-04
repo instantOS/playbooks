@@ -19,9 +19,7 @@
             MEMORY: "10G"
             MAX_PLAYERS: "50"
             MOTD: "paperbenni's minecraft server"
-            ICON:
-              "https://1.gravatar.com/avatar/bd4bcade88756feb3f21b0b97ff1225b47705f36\
-              5691be12da2ffea5da6ddbd3?size=256"
+            ICON: "https://1.gravatar.com/avatar/bd4bcade88756feb3f21b0b97ff1225b47705f365691be12da2ffea5da6ddbd3?size=256"
             ONLINE_MODE: "false"
             DIFFICULTY: "3"
             VERSION: LATEST
@@ -30,12 +28,13 @@
           # allow attaching to the container
           stdin_open: true
           tty: true
-- name: update spigot plugins
-  copy:
-    src: "{{ mpm_dir }}/plugins/{{ item }}/{{ minecraft_version }}/{{ item }}.jar"
-    dest: "{{ plugin_dir }}/{{ item }}.jar"
+- name: Update spigot plugins
+  ansible.builtin.copy:
+    src: "{{ minecraft_mpm_dir }}/plugins/{{ item }}/{{ minecraft_version }}/{{ item }}.jar"
+    dest: "{{ minecraft_plugin_dir }}/{{ item }}.jar"
     owner: 1001
     group: 30001
+    mode: "0644"
   with_items:
     - chat
     - essentials

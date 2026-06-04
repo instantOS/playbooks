@@ -1,18 +1,18 @@
 ---
 - name: Create Docker config directory
-  file:
+  ansible.builtin.file:
     path: /etc/docker
     state: directory
     mode: "0755"
 - name: Create Docker data directory
-  file:
+  ansible.builtin.file:
     path: "/tank/data/docker"
     state: directory
     mode: "0755"
     owner: root
     group: root
 - name: Configure Docker to store data on external drive
-  copy:
+  ansible.builtin.copy:
     content: |
       {
         "data-root": "/tank/data/docker"
@@ -20,7 +20,7 @@
     dest: /etc/docker/daemon.json
     mode: "0644"
 - name: Create monthly Docker image prune cronjob
-  cron:
+  ansible.builtin.cron:
     name: "Docker image prune"
     job: "docker image prune --all -f"
     month: "*"

@@ -1,4 +1,4 @@
 ---
-mpm_dir: ~/workspace/mpm-repo
+minecraft_mpm_dir: ~/workspace/mpm-repo
 minecraft_version: "1.21"
-plugin_dir: /tank/data/spigot/data/plugins
+minecraft_plugin_dir: /tank/data/spigot/data/plugins

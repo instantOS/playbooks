@@ -1,15 +1,15 @@
 ---
 - name: Update apt cache
   become: true
-  apt:
-    update_cache: yes
+  ansible.builtin.apt:
+    update_cache: true
 
 - name: Upgrade packages
   become: true
-  apt:
+  ansible.builtin.apt:
     upgrade: "dist"
-    autoremove: yes
-    autoclean: yes
+    autoremove: true
+    autoclean: true
 - name: Install various packages
   ansible.builtin.apt:
     name:
@@ -25,14 +25,14 @@
       - cron
       - fzf
       - wget
-- name: ensure ubuntu user exists
-  user:
+- name: Ensure ubuntu user exists
+  ansible.builtin.user:
     name: paperbenni
     state: present
     groups: sudo
-    append: yes
+    append: true
 - name: Ensure ssh key is authorized
-  authorized_key:
+  ansible.posix.authorized_key:
     user: ubuntu
     state: present
     key: "{{ lookup('file', '/home/benjamin/.ssh/id_rsa.pub') }}"
@@ -42,7 +42,7 @@
     classic: true
 
 - name: Create monthly Docker image prune cronjob
-  cron:
+  ansible.builtin.cron:
     name: "Docker image prune"
     job: "docker image prune --all -f"
     month: "*"
@@ -52,7 +52,7 @@
     user: root
     cron_file: docker-image-prune
 - name: Create weekly Docker volume prune cronjob
-  cron:
+  ansible.builtin.cron:
     name: "Docker volume prune"
     job: "docker volume prune -f"
     weekday: "0"
@@ -61,7 +61,7 @@
     user: root
     cron_file: docker-volume-prune
 - name: Create weekly Docker container prune cronjob
-  cron:
+  ansible.builtin.cron:
     name: "Docker container prune"
     job: "docker container prune -f"
     weekday: "0"

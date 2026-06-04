@@ -9,36 +9,37 @@
 #     enabled: true
 #     state: started
 - name: Ensure cifs-utils is installed
-  apt:
+  ansible.builtin.apt:
     name: cifs-utils
     state: present
 - name: Ensure samba is installed
-  apt:
+  ansible.builtin.apt:
     name: samba
     state: present
 - name: Ensure kernel modules extra are installed
-  apt:
+  ansible.builtin.apt:
     name: "linux-modules-extra-{{ ansible_facts['kernel'] }}"
     state: present
 - name: Install storagebox credentials
-  template:
+  ansible.builtin.template:
     src: templates/backup-credentials.txt
     dest: /etc/backup-credentials.txt
-    mode: 0600
+    mode: "0600"
 - name: Ensure mountpoint exists
-  file:
+  ansible.builtin.file:
     path: /mnt/backup-server
     state: directory
+    mode: "0755"
 - name: Ensure backup user exists
-  user:
+  ansible.builtin.user:
     name: "{{ backup_user }}"
     state: present
 - name: Ensure hetzner group exists
-  group:
+  ansible.builtin.group:
     name: "{{ backup_group }}"
     state: present
 - name: Mount storagebox
-  mount:
+  ansible.posix.mount:
     path: /mnt/backup-server
     src: "//{{ backup_username }}.your-storagebox.de/backup"
     fstype: cifs

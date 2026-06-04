@@ -26,7 +26,7 @@
     src: "~/workspace/mpm-repo/spigot/{{ minecraft_version }}/spigot.jar"
     dest: /home/ubuntu/spigot/spigot.jar
     owner: ubuntu
-    mode: 0755
+    mode: "0755"
   tags:
     - minecraft
 - name: update spigot plugins

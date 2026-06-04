@@ -1,11 +1,11 @@
 ---
 - name: Install rsync
-  apt:
+  ansible.builtin.apt:
     name:
       - rsync
     state: present
 - name: Create required directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: "0755"
@@ -15,7 +15,7 @@
     - /data/caddy/data
     - /data/caddy/config
 - name: Create Caddyfile with package configuration
-  copy:
+  ansible.builtin.copy:
     dest: /data/caddy/file/Caddyfile
     content: |
       packages.instantos.io {
@@ -24,11 +24,11 @@
               browse
               precompressed br gzip
           }
-          
+
           encode gzip
       }
     mode: "0644"
-- name: set up caddy
+- name: Set up caddy
   community.docker.docker_compose_v2:
     project_name: caddy
     pull: "always"
@@ -44,7 +44,9 @@
             - /data/caddy/site:/srv
             - /data/caddy/data:/data
             - /data/caddy/config:/config
-- name: ensure all instantOS packages are in caddy
-  copy:
+- name: Ensure all instantOS packages are in caddy
+  ansible.builtin.copy:
     src: ~/instantbuild/
     dest: /data/caddy/site/
+    mode: "0644"
+    directory_mode: "0755"

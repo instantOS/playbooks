@@ -35,6 +35,7 @@
 - name: Add wiki.js to caddy
   ansible.builtin.copy:
     dest: /etc/caddy/conf.d/wikijs.caddy
+    mode: "0644"
     content: |
       wiki.paperbenni.xyz {
       reverse_proxy localhost:8087

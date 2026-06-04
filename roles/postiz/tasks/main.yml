@@ -269,6 +269,7 @@
 - name: Add postiz to caddy
   ansible.builtin.copy:
     dest: /etc/caddy/conf.d/postiz.caddy
+    mode: "0644"
     content: |
       postiz.paperbenni.xyz {
       reverse_proxy localhost:4007

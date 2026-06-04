@@ -1,5 +1,5 @@
 ---
-- name: chungus setup
+- name: Chungus setup
   hosts: chungus
   become: true
   vars_files:
@@ -69,4 +69,4 @@
     - { role: hermes, tags: hermes }
     - { role: postiz, tags: postiz }
   handlers:
-    - import_tasks: handlers/basics.yml
+    - ansible.builtin.import_tasks: handlers/basics.yml
