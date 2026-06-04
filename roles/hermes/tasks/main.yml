@@ -12,11 +12,12 @@
           command: gateway run
           ports:
             - "8642:8642"
-            - "9119:9119"
+            - "127.0.0.1:9119:9119"
           volumes:
             - "/tank/data/hermes/.hermes:/opt/data"
           environment:
-            - HERMES_DASHBOARD=1
+            HERMES_DASHBOARD: "1"
+            HERMES_DASHBOARD_INSECURE: "1"
           deploy:
             resources:
               limits:
