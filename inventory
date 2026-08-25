@@ -2,7 +2,7 @@
 video.paperbenni.xyz ansible_user=paperbenni
 
 [capybara]
-packages.instantos.io ansible_user=ubuntu
+capybara.paperbenni.xyz ansible_user=paperbenni
 
 [chungus]
 minecraft.paperbenni.xyz ansible_user=ubuntu

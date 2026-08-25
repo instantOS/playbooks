@@ -46,6 +46,7 @@
   roles:
     - ubuntu
     - grog.sudo
+    - earlyoom
     - geerlingguy.firewall
     - geerlingguy.security
     - geerlingguy.swap
@@ -56,4 +57,3 @@
       tags: instantosmirror
     - role: restreamer
       tags: restreamer
-    - earlyoom
