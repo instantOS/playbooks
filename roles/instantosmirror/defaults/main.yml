@@ -1,0 +1,9 @@
+---
+# Canonical CI-published instantOS package repository (GitHub Pages).
+instantosmirror_upstream_url: https://instantos.io/packages/
+instantosmirror_domain: packages.instantos.io
+# Snapshots live in <data_dir>/snapshots, caddy serves <data_dir>/current.
+instantosmirror_data_dir: /data/instantos-mirror
+instantosmirror_keep_snapshots: 4
+instantosmirror_sync_minute: "17"
+instantosmirror_sync_hour: "*"

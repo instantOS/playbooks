@@ -49,7 +49,7 @@
     - earlyoom
     - geerlingguy.firewall
     - geerlingguy.security
-    - geerlingguy.swap
+    # - geerlingguy.swap
     - geerlingguy.docker
     - role: caddy
       tags: caddy

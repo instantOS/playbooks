@@ -1,34 +1,58 @@
 ---
-- name: Install rsync
+- name: Install wget for mirror sync
   ansible.builtin.apt:
     name:
-      - rsync
+      - wget
     state: present
-- name: Create required directories
+
+- name: Create mirror directories
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
+    owner: root
+    group: root
     mode: "0755"
   loop:
-    - /data/caddy/site
+    - "{{ instantosmirror_data_dir }}"
+    - "{{ instantosmirror_data_dir }}/snapshots"
+
+- name: Install mirror sync script
+  ansible.builtin.copy:
+    src: sync-instantos-mirror.sh
+    dest: /usr/local/bin/sync-instantos-mirror
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Bootstrap first mirror sync
+  ansible.builtin.command:
+    cmd: >-
+      /usr/local/bin/sync-instantos-mirror
+      {{ instantosmirror_upstream_url }}
+      {{ instantosmirror_data_dir }}
+      {{ instantosmirror_keep_snapshots }}
+    creates: "{{ instantosmirror_data_dir }}/current"
+
+- name: Schedule periodic mirror sync
+  ansible.builtin.cron:
+    name: instantos-mirror-sync
+    user: root
+    cron_file: instantos-mirror
+    minute: "{{ instantosmirror_sync_minute }}"
+    hour: "{{ instantosmirror_sync_hour }}"
+    job: >-
+      /usr/local/bin/sync-instantos-mirror
+      {{ instantosmirror_upstream_url }}
+      {{ instantosmirror_data_dir }}
+      {{ instantosmirror_keep_snapshots }}
+
 - name: Create instantOS packages Caddy configuration
   ansible.builtin.copy:
     dest: /etc/caddy/conf.d/packages.caddy
     content: |
-      packages.instantos.io {
-        root * /srv/
-        file_server {
-          browse
-          precompressed br gzip
-        }
-
-        encode gzip
+      {{ instantosmirror_domain }} {
+        root * {{ instantosmirror_data_dir }}/current
+        file_server browse
       }
     mode: "0644"
   notify: reload caddy
-- name: Ensure all instantOS packages are in caddy
-  ansible.builtin.copy:
-    src: ~/instantbuild/
-    dest: /data/caddy/site/
-    mode: "0644"
-    directory_mode: "0755"
