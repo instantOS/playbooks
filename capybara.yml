@@ -22,12 +22,14 @@
       - "8888"
       - "9005"
       - "1935"
+      - "1936"
       - "19132"
       - "8000"
       - "8443"
     firewall_allowed_udp_ports:
       - "64738"
       - "1935"
+      - "6000"
       - "25565"
       - "19132"
     firewall_flush_rules_and_chains: true
@@ -48,6 +50,10 @@
     - geerlingguy.security
     - geerlingguy.swap
     - geerlingguy.docker
+    - role: caddy
+      tags: caddy
     - role: instantosmirror
       tags: instantosmirror
+    - role: restreamer
+      tags: restreamer
     - earlyoom

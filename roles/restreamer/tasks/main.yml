@@ -1,0 +1,38 @@
+---
+- name: Create Restreamer data directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ restreamer_data_dir }}/config"
+    - "{{ restreamer_data_dir }}/data"
+
+- name: Ensure Restreamer is set up
+  community.docker.docker_compose_v2:
+    project_name: restreamer
+    pull: always
+    definition:
+      services:
+        restreamer:
+          image: "{{ restreamer_image }}"
+          container_name: restreamer
+          restart: always
+          ports:
+            - "127.0.0.1:8080:8080"
+            - "1935:1935"
+            - "1936:1936"
+            - "6000:6000/udp"
+          volumes:
+            - "{{ restreamer_data_dir }}/config:/core/config"
+            - "{{ restreamer_data_dir }}/data:/core/data"
+
+- name: Add Restreamer to Caddy
+  ansible.builtin.copy:
+    dest: /etc/caddy/conf.d/restreamer.caddy
+    content: |
+      {{ restreamer_domain }} {
+        reverse_proxy 127.0.0.1:8080
+      }
+    mode: "0644"
+  notify: reload caddy

@@ -1,0 +1,4 @@
+---
+restreamer_domain: restreamer.paperbenni.xyz
+restreamer_image: datarhei/restreamer:latest
+restreamer_data_dir: /opt/restreamer
