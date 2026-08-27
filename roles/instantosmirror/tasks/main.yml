@@ -15,6 +15,16 @@
   loop:
     - "{{ instantosmirror_data_dir }}"
     - "{{ instantosmirror_data_dir }}/snapshots"
+    - "{{ instantosmirror_wkd_data_dir }}/.well-known/openpgpkey"
+
+- name: Deploy WKD keys and policy
+  ansible.builtin.copy:
+    src: wkd/
+    dest: "{{ instantosmirror_wkd_data_dir }}/.well-known/openpgpkey/"
+    owner: root
+    group: root
+    mode: "0644"
+    directory_mode: "0755"
 
 - name: Install mirror sync script
   ansible.builtin.copy:
@@ -53,6 +63,24 @@
       {{ instantosmirror_domain }} {
         root * {{ instantosmirror_data_dir }}/current
         file_server browse
+      }
+    mode: "0644"
+  notify: reload caddy
+
+- name: Create instantOS WKD Caddy configuration
+  ansible.builtin.copy:
+    dest: /etc/caddy/conf.d/openpgpkey.caddy
+    content: |
+      {{ instantosmirror_wkd_domain }} {
+        root * {{ instantosmirror_wkd_data_dir }}
+        file_server
+
+        header {
+          Access-Control-Allow-Origin *
+        }
+
+        @hu path */hu/*
+        header @hu Content-Type application/octet-stream
       }
     mode: "0644"
   notify: reload caddy
