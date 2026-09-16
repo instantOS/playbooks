@@ -63,14 +63,31 @@
     mode: "0600"
   notify: Restart Bifrost
 
+- name: Build the VPN container environment
+  ansible.builtin.set_fact:
+    bifrost_vpn_environment:
+      VPN_HOST: "{{ bifrost_vpn_host }}"
+      VPN_PORT: "{{ bifrost_vpn_port }}"
+      VPN_USER: "{{ bifrost_vpn_user }}"
+      VPN_PASSWORD: "{{ bifrost_vpn_password }}"
+      VPN_REALM: "{{ bifrost_vpn_realm }}"
+      VPN_FULL_TUNNEL: "off"
+  no_log: true
+
+- name: Pin the VPN gateway certificate when configured
+  ansible.builtin.set_fact:
+    bifrost_vpn_environment: "{{ bifrost_vpn_environment | combine({'VPN_TRUSTED_CERT': bifrost_vpn_trusted_cert}) }}"
+  when: bifrost_vpn_trusted_cert | default('') | length > 0
+  no_log: true
+
 - name: Ensure Bifrost and its VPN are running
   community.docker.docker_compose_v2:
     project_name: bifrost
-    pull: missing
+    pull: always
     definition:
       services:
         openfortivpn:
-          image: "{{ bifrost_vpn_image }}"
+          image: paperbenni/openfortivpn:latest
           container_name: bifrost-openfortivpn
           restart: unless-stopped
           cap_add:
@@ -80,16 +97,9 @@
             - /dev/ppp:/dev/ppp
           ports:
             - "{{ bifrost_listen_address }}:{{ bifrost_port }}:{{ bifrost_port }}"
-          environment:
-            VPN_HOST: "{{ bifrost_vpn_host }}"
-            VPN_PORT: "{{ bifrost_vpn_port }}"
-            VPN_USER: "{{ bifrost_vpn_user }}"
-            VPN_PASSWORD: "{{ bifrost_vpn_password }}"
-            VPN_REALM: "{{ bifrost_vpn_realm }}"
-            VPN_TRUSTED_CERT: "{{ bifrost_vpn_trusted_cert }}"
-            VPN_FULL_TUNNEL: "off"
+          environment: "{{ bifrost_vpn_environment }}"
         bifrost:
-          image: "{{ bifrost_image }}"
+          image: maximhq/bifrost:v2.2.0
           container_name: bifrost
           restart: unless-stopped
           network_mode: service:openfortivpn

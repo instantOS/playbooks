@@ -20,11 +20,17 @@ deploying:
 ```yaml
 bifrost_vpn_user: your-vpn-user
 bifrost_vpn_password: your-vpn-password
-bifrost_vpn_trusted_cert: "sha256-of-the-vpn-gateway-certificate"
 bifrost_admin_username: admin
 bifrost_admin_password: a-long-random-password
 bifrost_encryption_key: a-stable-random-secret-of-at-least-32-characters
 ```
+
+No certificate setup is needed: the VPN gateway certificate validates
+against the container's system CA store. Only if the gateway ever stops
+validating (e.g. a private CA) set the optional pin
+`bifrost_vpn_trusted_cert` to the gateway certificate's sha256 digest.
+
+(Bifrost pinned, openfortivpn tracking `latest`).
 
 The encryption key must remain stable after Bifrost has stored credentials.
 Deploy just this service with:
