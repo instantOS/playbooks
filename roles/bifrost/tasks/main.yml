@@ -1,0 +1,134 @@
+---
+- name: Validate Bifrost configuration
+  ansible.builtin.assert:
+    that:
+      - bifrost_domain | length > 0
+      - bifrost_vpn_host | length > 0
+      - bifrost_vpn_user | length > 0
+      - bifrost_vpn_password | length > 0
+      - bifrost_admin_username | length > 0
+      - bifrost_admin_password | length >= 16
+      - bifrost_encryption_key | length >= 32
+    fail_msg: >-
+      Configure the Bifrost VPN credentials, an admin password of at least 16
+      characters, and an encryption key of at least 32 characters in the
+      Ansible vault.
+  no_log: true
+
+- name: Load Bifrost PPP kernel modules
+  community.general.modprobe:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - ppp_generic
+    - ppp_async
+    - ppp_deflate
+
+- name: Create the PPP device when udev did not create it
+  ansible.builtin.command:
+    argv:
+      - mknod
+      - /dev/ppp
+      - c
+      - "108"
+      - "0"
+    creates: /dev/ppp
+
+- name: Check the PPP device
+  ansible.builtin.stat:
+    path: /dev/ppp
+  register: bifrost_ppp_device
+
+- name: Require the PPP device
+  ansible.builtin.assert:
+    that:
+      - bifrost_ppp_device.stat.exists
+      - bifrost_ppp_device.stat.ischr
+    fail_msg: /dev/ppp is unavailable after loading the PPP kernel modules.
+
+- name: Create the Bifrost data directory
+  ansible.builtin.file:
+    path: "{{ bifrost_data_dir }}"
+    state: directory
+    owner: "1000"
+    group: root
+    mode: "0770"
+
+- name: Write the secured Bifrost configuration
+  ansible.builtin.template:
+    src: config.json.j2
+    dest: "{{ bifrost_data_dir }}/config.json"
+    owner: "1000"
+    group: root
+    mode: "0600"
+  notify: Restart Bifrost
+
+- name: Ensure Bifrost and its VPN are running
+  community.docker.docker_compose_v2:
+    project_name: bifrost
+    pull: missing
+    definition:
+      services:
+        openfortivpn:
+          image: "{{ bifrost_vpn_image }}"
+          container_name: bifrost-openfortivpn
+          restart: unless-stopped
+          cap_add:
+            - NET_ADMIN
+            - NET_RAW
+          devices:
+            - /dev/ppp:/dev/ppp
+          ports:
+            - "{{ bifrost_listen_address }}:{{ bifrost_port }}:{{ bifrost_port }}"
+          environment:
+            VPN_HOST: "{{ bifrost_vpn_host }}"
+            VPN_PORT: "{{ bifrost_vpn_port }}"
+            VPN_USER: "{{ bifrost_vpn_user }}"
+            VPN_PASSWORD: "{{ bifrost_vpn_password }}"
+            VPN_REALM: "{{ bifrost_vpn_realm }}"
+            VPN_TRUSTED_CERT: "{{ bifrost_vpn_trusted_cert }}"
+            VPN_FULL_TUNNEL: "off"
+        bifrost:
+          image: "{{ bifrost_image }}"
+          container_name: bifrost
+          restart: unless-stopped
+          network_mode: service:openfortivpn
+          depends_on:
+            openfortivpn:
+              condition: service_healthy
+          cap_drop:
+            - ALL
+          security_opt:
+            - no-new-privileges:true
+          environment:
+            APP_HOST: 0.0.0.0
+            APP_PORT: "{{ bifrost_port }}"
+            LOG_LEVEL: info
+            LOG_STYLE: json
+            BIFROST_ADMIN_USERNAME: "{{ bifrost_admin_username }}"
+            BIFROST_ADMIN_PASSWORD: "{{ bifrost_admin_password }}"
+            BIFROST_ENCRYPTION_KEY: "{{ bifrost_encryption_key }}"
+          volumes:
+            - "{{ bifrost_data_dir }}:/app/data"
+          healthcheck:
+            test:
+              - CMD
+              - wget
+              - --no-verbose
+              - --tries=1
+              - -O
+              - /dev/null
+              - "http://localhost:{{ bifrost_port }}/health"
+            interval: 30s
+            timeout: 10s
+            retries: 3
+  no_log: true
+
+- name: Add Bifrost to Caddy
+  ansible.builtin.template:
+    src: bifrost.caddy.j2
+    dest: "{{ caddy_confd_dir }}/bifrost.caddy"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload Caddy for Bifrost

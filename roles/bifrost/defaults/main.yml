@@ -1,0 +1,19 @@
+---
+bifrost_domain: bifrost.paperbenni.xyz
+bifrost_listen_address: 127.0.0.1
+bifrost_port: 8085
+bifrost_data_dir: /var/lib/bifrost
+bifrost_image: maximhq/bifrost:v2.2.0
+bifrost_vpn_image: paperbenni/openfortivpn:20260916
+
+bifrost_vpn_host: fortivpn.uni-freiburg.de
+bifrost_vpn_port: 443
+bifrost_vpn_user: ""
+bifrost_vpn_password: ""
+bifrost_vpn_realm: ""
+bifrost_vpn_trusted_cert: ""
+
+bifrost_admin_username: admin
+bifrost_admin_password: ""
+bifrost_encryption_key: ""
+bifrost_max_request_body_size_mb: 50

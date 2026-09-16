@@ -1,0 +1,18 @@
+{
+  "$schema": "https://www.getbifrost.ai/schema",
+  "encryption_key": "env.BIFROST_ENCRYPTION_KEY",
+  "governance": {
+    "auth_config": {
+      "is_enabled": true,
+      "admin_username": "env.BIFROST_ADMIN_USERNAME",
+      "admin_password": "env.BIFROST_ADMIN_PASSWORD",
+      "disable_auth_on_inference": false
+    }
+  },
+  "client": {
+    "allowed_origins": ["https://{{ bifrost_domain }}"],
+    "enforce_auth_on_inference": true,
+    "max_request_body_size_mb": {{ bifrost_max_request_body_size_mb }},
+    "mcp_external_client_url": "https://{{ bifrost_domain }}"
+  }
+}

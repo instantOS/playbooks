@@ -1,0 +1,25 @@
+---
+- name: Restart Bifrost
+  community.docker.docker_container:
+    name: bifrost
+    state: started
+    restart: true
+
+- name: Validate Caddy configuration for Bifrost
+  listen: Reload Caddy for Bifrost
+  ansible.builtin.command:
+    argv:
+      - caddy
+      - validate
+      - --config
+      - /etc/caddy/Caddyfile
+  changed_when: false
+
+- name: Reload Caddy for Bifrost
+  ansible.builtin.command:
+    argv:
+      - caddy
+      - reload
+      - --config
+      - /etc/caddy/Caddyfile
+  changed_when: true

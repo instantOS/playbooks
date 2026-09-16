@@ -31,6 +31,8 @@
     - geerlingguy.docker
     - caddy
     - earlyoom
+    - role: bifrost
+      tags: bifrost
     - role: stuff-server
       tags: stuff-server
     - role: storagebox

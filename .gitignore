@@ -1,2 +1,3 @@
 tmpsecrets/*
 files/docker_compose/jitsi/.env
+/.ansible
