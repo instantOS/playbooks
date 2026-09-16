@@ -3,11 +3,6 @@
 Ansible-playbooks for instantOS servers
 
 
-
-## TODO
-
-- instantshell role
-
 ## Bifrost on axolotl
 
 The `bifrost` role runs the gateway through the Freiburg FortiVPN and exposes
